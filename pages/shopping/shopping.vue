@@ -143,15 +143,15 @@
 
 	.goods_list {
 		background-color: #fff;
-		padding-left: 34rpx;
-		padding-right: 0;
 		margin-top: 18rpx;
 
 		.goods {
 			height: 254rpx;
 			display: flex;
 			align-items: center;
-
+			.label{
+				margin-left: 34rpx;
+			}
 			.img {
 				width: 144rpx;
 				height: 176rpx;
