@@ -94,9 +94,7 @@
 </script>
 
 <style lang="less">
-	page {
-		padding-bottom: 120rpx;
-	}
+
 
 	.content {
 		position: relative;

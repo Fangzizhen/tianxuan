@@ -1,0 +1,77 @@
+.page .title_img {
+  width: 100%;
+  height: 350rpx;
+}
+.page .recommend_box .recommend {
+  height: 248rpx;
+  background-color: #FFFFFF;
+  margin-bottom: 12rpx;
+  padding: 15rpx 53rpx 15rpx 50rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.page .recommend_box .recommend .recommend_img {
+  width: 248rpx;
+  height: 248rpx;
+  margin-right: 33rpx;
+}
+.page .recommend_box .recommend .recommend_txt {
+  padding: 15rpx 0;
+  width: 370rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  position: relative;
+}
+.page .recommend_box .recommend .recommend_txt .title {
+  font-size: 28rpx;
+  font-weight: 400;
+  color: #000000;
+  line-height: 40rpx;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.page .recommend_box .recommend .recommend_txt .price {
+  font-family: Akrobat-Regular;
+  font-size: 40rpx;
+  line-height: 48rpx;
+  color: #000000;
+}
+.page .recommend_box .recommend .recommend_txt .price .symbol {
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+.page .recommend_box .recommend .recommend_txt .price .earn {
+  font-family: SourceHanSansCN-Regular;
+  margin-left: 6rpx;
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #ff8160;
+  line-height: 36rpx;
+}
+.page .recommend_box .recommend .recommend_txt .price .earn text {
+  margin-left: 4rpx;
+  font-family: Akrobat-Regular;
+  font-size: 40rpx;
+  line-height: 48rpx;
+}
+.page .recommend_box .recommend .recommend_txt image {
+  width: 48rpx;
+  height: 48rpx;
+  position: absolute;
+  bottom: 10rpx;
+  right: 0;
+}
+

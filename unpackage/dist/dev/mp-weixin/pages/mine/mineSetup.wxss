@@ -1,0 +1,26 @@
+.content {
+  border-top: 1rpx solid #DBDBDB;
+}
+.content .navto {
+  background-color: #FFFFFF;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 0 38rpx;
+  height: 112rpx;
+  border-bottom: 1rpx solid #DBDBDB;
+}
+.content .navto text {
+  font-size: 28rpx;
+}
+.content .navto image {
+  width: 28rpx;
+  height: 28rpx;
+}
+

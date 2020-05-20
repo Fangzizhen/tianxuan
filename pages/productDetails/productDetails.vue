@@ -34,7 +34,7 @@
 				</view>
 				<uni-icons type="arrowright" size="13" color="#B3B3B3"></uni-icons>
 			</view>
-			
+
 			<navigator class="specifications" url="/pages/address/addressList" open-type="navigate">
 				<text class="title">送至</text>
 				<view class="con">北京市 朝阳区</view>
@@ -81,12 +81,11 @@
 		</view>
 
 		<!-- 规格-模态层弹窗 -->
-		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec" >
+		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="stopPrevent" @click="toggleSpec">
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<scroll-view scroll-y="true" class="layer attr-content" scroll-with-animation="true" @click.stop="stopPrevent">
 				<view class="attr-box">
-
 					<view class="a-t">
 						<image :src="goods.images"></image>
 						<view class="right">
@@ -98,17 +97,15 @@
 					<view v-for="(item,index) in specifications" :key="index" class="attr-list">
 						<text class="attr_name">{{item.name}}</text>
 						<view class="item-list">
-							<text v-for="(childItem, childIndex) in item.value" :key="childIndex" class="tit">
-								<!-- v-if="childItem.pid === item.id" -->
-								<!-- @click="selectSpec(childIndex, childItem.pid)" -->
-								<!-- :class="{selected: childItem.selected}" -->
+							<text v-for="(childItem, childIndex) in item.value" :key="childIndex" class="tit" @click="selectSpec(item.name,childItem.name, childItem.inventory)"
+							 :class=" inventory === childItem.inventory? 'selected':' '">
 								{{childItem.name}}
 							</text>
 						</view>
 					</view>
-					<view  class="number_box">
+					<view class="number_box">
 						<text class="attr_name">数量</text>
-						<uni-number-box ></uni-number-box>
+						<uni-number-box></uni-number-box>
 					</view>
 					<view class="btn_box" v-if="user_type == 0">
 						<view class="join">加入购物车</view>
@@ -128,7 +125,9 @@
 	import request from '../../common/request.js';
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
 	export default {
-		components: {uniNumberBox},
+		components: {
+			uniNumberBox
+		},
 		data() {
 			return {
 				goods: [], //全部数据
@@ -136,7 +135,8 @@
 				user_type: 1,
 				specClass: 'none',
 				specifications: [], //产品规格信息
-				popup_type:1//弹窗Type
+				popup_type: 1, //弹窗Type
+				inventory: ""
 			}
 		},
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
@@ -147,10 +147,11 @@
 			getDetail(data) {
 				var data = data;
 				request.post('goods/detail', data).then(res => {
-					console.log(res.data)
-					this.goods = res.data.goods
-					this.banner_list = res.data.goods.photo
-					this.specifications = res.data.goods.specifications.choose
+					console.log(res.data);
+					this.goods = res.data.goods;
+					this.banner_list = res.data.goods.photo;
+					this.specifications = res.data.goods.specifications.choose;
+					console.log(this.specifications)
 				})
 			},
 			//规格弹窗开关
@@ -164,7 +165,21 @@
 					this.specClass = 'show';
 				}
 			},
-			stopPrevent(){}
+			stopPrevent() {},
+			selectSpec(type, name, inventory) {
+				this.inventory = inventory; 
+				var specType = [{
+						type: type,
+						value: name,
+					}, ]
+				var data = {
+					id: this.goods.id,
+					spec: JSON.stringify(specType)
+				}
+				request.post('goods/spectype', data).then(res => {
+					console.log(res.data);
+				})
+			}
 		}
 	}
 </script>
@@ -444,8 +459,6 @@
 					.txt {
 						display: flex;
 
-						// justify-content: center;
-						// align-items: center;
 						text {
 							display: block;
 						}
@@ -567,9 +580,11 @@
 		.attr-content {
 			.attr-box {
 				padding: 10rpx 30rpx;
+
 				.a-t {
 					display: flex;
 					align-items: center;
+
 					image {
 						width: 232rpx;
 						height: 232rpx;
@@ -577,6 +592,7 @@
 						border-radius: 8rpx;
 						;
 					}
+
 					.right {
 						height: 232rpx;
 						display: flex;
@@ -584,6 +600,7 @@
 						padding-left: 24rpx;
 						line-height: 42rpx;
 						justify-content: space-between;
+
 						.price {
 							font-family: Akrobat-Regular;
 							color: #FF8900;
@@ -615,11 +632,13 @@
 					flex-direction: column;
 					padding-top: 30rpx;
 					padding-left: 10rpx;
+
 					.attr_name {
 						font-size: 24rpx;
 						line-height: 34rpx;
 					}
 				}
+
 				.number_box {
 					display: flex;
 					justify-content: space-between;
@@ -627,26 +646,30 @@
 					padding-top: 30rpx;
 					padding-left: 10rpx;
 					margin-bottom: 90rpx;
+
 					.attr_name {
 						font-size: 24rpx;
 						line-height: 34rpx;
 					}
 				}
-				.btn_box{
+
+				.btn_box {
 					width: 100%;
 					height: 82rpx;
 					display: flex;
 					text-align: center;
-					view{
+
+					view {
 						flex: 1;
 						color: #FE7956;
 					}
+
 					.join {
 						background: #FEEAE5;
 						font-size: 28rpx;
 						line-height: 82rpx;
 					}
-					
+
 					.purchase {
 						font-size: 28rpx;
 						line-height: 82rpx;
@@ -656,17 +679,19 @@
 						border-bottom: 1rpx solid #FEEAE5;
 					}
 				}
-				.btn_determine{
-					width:100%;
-					height:82rpx;
-					background:rgba(254,234,229,1);
-					border-radius:12rpx;
-					border:1rpx solid rgba(254,234,229,1);
-					font-size:32rpx;
+
+				.btn_determine {
+					width: 100%;
+					height: 82rpx;
+					background: rgba(254, 234, 229, 1);
+					border-radius: 12rpx;
+					border: 1rpx solid rgba(254, 234, 229, 1);
+					font-size: 32rpx;
 					text-align: center;
-					color:rgba(254,121,86,1);
-					line-height:82rpx;
+					color: rgba(254, 121, 86, 1);
+					line-height: 82rpx;
 				}
+
 				.item-list {
 					padding: 20rpx 0 0;
 					display: flex;
@@ -689,8 +714,8 @@
 					}
 
 					.selected {
-						background: #fbebee;
-						// color: $uni-color-primary;
+						background: #FFE9E3;
+						color: #FE7956;
 					}
 				}
 			}

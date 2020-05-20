@@ -12,7 +12,7 @@
 		</view>
 		<!-- 收货地址 -->
 		<view class="row " @tap.stop="btnClick">
-			<view class="input" v-if="city.province == ''">所在地区</view>
+			<view class="input" v-if="city == ''">所在地区</view>
 			<view class="input" v-else>
 				<view>{{city.province}}</view>
 				<view>{{city.city}}</view>
@@ -58,11 +58,7 @@
 		},
 		data() {
 			return {
-				city:{
-					province:"",
-					city:"",
-					county:""
-				},
+				city:"",
 				addressData: { //提交数据
 					name: '',
 					mobile: '',
@@ -99,16 +95,13 @@
 			uni.setNavigationBarTitle({
 				title
 			})
-			this.getCityList()
 		},
 		methods: {
-			// 获取全国地址
-			getCityList() {
+			// 提交数据
+			postForm() {
 				var data = {};
-				request.post('region/index', data).then(res => {
-					console.log(res)
-					// this.catrgory = res.data.data
-					// 	this.makeup = false
+				request.post('useraddress/save', data).then(res => {
+					
 				})
 			},
 			
@@ -119,11 +112,7 @@
 			// 接受地址回调获得数据
 			successSelectAddress(address) { 
 				console.log(address)
-				var arr = address.split("+")
-				console.log(arr)
-				this.city.province = arr[0]
-				this.city.city = arr[1]
-				this.city.county = arr[2]
+				this.city=address;
 			},
 			// 设置默认开关
 			switchChange() {
@@ -135,27 +124,27 @@
 			},
 			// 保存地址
 			confirm(){
-				let data = this.addressData;
-				if(!data.name){
-					this.$api.msg('请填写收货人姓名');
-					return;
-				}
-				if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)){
-					this.$api.msg('请输入正确的手机号码');
-					return;
-				}
+				// let data = this.addressData;
+				// if(!data.name){
+				// 	this.$api.msg('请填写收货人姓名');
+				// 	return;
+				// }
+				// if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)){
+				// 	this.$api.msg('请输入正确的手机号码');
+				// 	return;
+				// }
 				
-				if(!data.area){
-					this.$api.msg('请填写门牌号信息');
-					return;
-				}
+				// if(!data.area){
+				// 	this.$api.msg('请填写门牌号信息');
+				// 	return;
+				// }
 				
-				//this.$api.prePage()获取上一页实例，可直接调用上页所有数据和方法，在App.vue定义
-				this.$api.prePage().refreshList(data, this.manageType);
-				this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				setTimeout(()=>{
-					uni.navigateBack()
-				}, 800)
+				// //this.$api.prePage()获取上一页实例，可直接调用上页所有数据和方法，在App.vue定义
+				// this.$api.prePage().refreshList(data, this.manageType);
+				// this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
+				// setTimeout(()=>{
+				// 	uni.navigateBack()
+				// }, 800)
 			},
 		}
 

@@ -1,16 +1,21 @@
 {
-  "pages": [
-    "pages/index/index",
-    "pages/list/list",
-    "pages/shopping/shopping",
-    "pages/mine/mine"
+  "usingComponents": {
+    "uni-icons": "/components/uni-icons/uni-icons"
+  }
+}g/shopping",
+    "pages/mine/mine",
+    "pages/mine/mineSetup",
+    "pages/productDetails/productDetails",
+    "pages/productList/productList",
+    "pages/service/service",
+    "pages/address/addressList",
+    "pages/address/addressEdit"
   ],
   "subPackages": [],
   "window": {
-    "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#007AFF",
-    "backgroundColor": "#FFFFFF"
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "添选",
+    "navigationBarBackgroundColor": "#FFFFFF"
   },
   "tabBar": {
     "color": "#8a8a8a",
@@ -44,6 +49,8 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap33.json"
+  "usingComponents": {
+    "mescroll-body": "/components/mescroll-uni/mescroll-body",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni"
+  }
 }

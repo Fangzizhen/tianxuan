@@ -44,7 +44,15 @@
 				cityData: {},
 				cityAreaArray: [],
 				selectIndexArr: [],
-				indicatorStyleLeft: 16
+				indicatorStyleLeft: 16,
+				emitList:{
+					provinceId:"",//省id
+					cityId:"",//市id
+					countyId:"",//县id
+					province:"",//省id
+					city:"",//市id
+					county:"",//县id
+				}
 			};
 		},
 		methods:{
@@ -109,8 +117,12 @@
 				if (swiper_index === 0){//第一级
 				
 					let currentObj = this.cityData[index]
+					let cityid = currentObj.id
 					let city = currentObj.name
-					console.log(city)
+					this.emitList.provinceId = cityid
+					this.emitList.province = city
+					
+					// console.log(city,"省")
 					this.dataList.splice(swiper_index,5,city)
 					this.dataList.splice(swiper_index + 1,0,'请选择')
 					this.cityAreaArray.splice(swiper_index + 1, 1,currentObj["city"])
@@ -127,8 +139,10 @@
 					let area = currentObj["area"]
 					if (area !== undefined){
 						
+						let cityid = currentObj.id
 						let city = currentObj.name
-						console.log(city)
+						this.emitList.cityId = cityid
+						this.emitList.city = city
 						this.dataList.splice(swiper_index,5,city)
 						this.dataList.splice(swiper_index + 1,0,'请选择')
 						this.cityAreaArray.splice(swiper_index + 1,1,currentObj["area"])
@@ -139,12 +153,13 @@
 							}, 50);
 						
 					}else{//是最下一级
-						
+						let cityid = currentObj.id
 						let city = currentObj.name
 						this.dataList.splice(swiper_index,1,city)
-						console.log(city)
+						this.emitList.countyId = cityid
+						this.emitList.county = city
 						//选择成功返回数据
-						this.$emit("selectAddress", this.dataList.join('+'))
+						this.$emit("selectAddress", this.emitList)
 						
 						this.$nextTick(() => {
 							this.changeIndicator(swiper_index)

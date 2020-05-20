@@ -4,11 +4,12 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true
+		"urlCheck": false,
+		"postcss": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.9.2",
-	"appid": "touristappid",
+	"appid": "wxa354c1e15a8a9c33",
 	"projectname": "tx_items",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
@@ -26,8 +27,15 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"name": "",
+					"path": "",
+					"query": "",
+					"id": 0
+				}
+			]
 		}
 	}
 }

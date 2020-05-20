@@ -80,6 +80,10 @@
 				]
 			}
 		},
+		onShow : function() {
+				var loginRes = this.checkLogin('2');
+				if(!loginRes){return false;}
+			},
 		methods: {
 			onClick(e) {
 				console.log('当前点击的是第' + e.index + '个按钮，点击内容是' + e.content.text)

@@ -1,0 +1,137 @@
+.content {
+  position: relative;
+}
+.list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  height: 130rpx;
+  padding: 34rpx 38rpx 24rpx 16rpx;
+  background: #fff;
+  position: relative;
+  border-bottom: 1rpx #DBDBDB solid;
+}
+.list:last-child {
+  border-bottom: 1rpx #FFFFFF solid;
+}
+.wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.wrapper .data-box {
+  width: 519rpx;
+  position: relative;
+}
+.wrapper .data-box::before {
+  position: absolute;
+  top: 50%;
+  right: -20rpx;
+  margin-top: -30rpx;
+  content: " ";
+  width: 1rpx;
+  height: 60rpx;
+  background-color: #E1E1E1;
+}
+.wrapper .ico {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  font-size: 36rpx;
+  line-height: 60rpx;
+  color: #fff;
+  text-align: center;
+  margin-right: 22rpx;
+}
+.wrapper .default {
+  background-color: #FE7956;
+}
+.wrapper .unDefault {
+  background-color: #F5EFEF;
+}
+.yticon {
+  font-size: 24rpx;
+  line-height: 34rpx;
+  color: #AEAEAE;
+}
+.address-box .tag {
+  width: 70rpx;
+  height: 34rpx;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  margin-right: 10rpx;
+  background: #FEEAE5;
+  text-align: center;
+  color: #FE7956;
+  padding: 4rpx 10rpx;
+}
+.address-box .addAble {
+  height: 34rpx;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  margin-right: 10rpx;
+  padding: 4rpx 10rpx;
+  background-color: #F4F4F4;
+  color: #333333;
+}
+.address-box .address {
+  font-size: 24rpx;
+  line-height: 42rpx;
+}
+.u-box .name {
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-right: 16rpx;
+}
+.u-box .mobile {
+  font-size: 28rpx;
+  font-family: Akrobat-Regular;
+  color: #aeaeae;
+  line-height: 34rpx;
+}
+.icon-bianji {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  height: 80rpx;
+  font-size: 40rpx;
+  padding-left: 30rpx;
+}
+.add-btn {
+  position: fixed;
+  left: 30rpx;
+  right: 30rpx;
+  bottom: 16rpx;
+  z-index: 95;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  width: 679rpx;
+  height: 82rpx;
+  font-size: 32rpx;
+  color: #FE7956;
+  border-radius: 10rpx;
+  border: none;
+  background-color: #FEEAE5;
+}
+

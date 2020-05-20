@@ -21,12 +21,22 @@
 		"style": {
 			"navigationBarTitleText": "购物车"
 		}
+	},{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
 	}, {
 		"path": "pages/mine/mine",
 		"style": {
 			"navigationBarTitleText": "个人中心"
 		}
-	}, {
+	},{
+		"path": "pages/mine/mineSetup",
+		"style": {
+			"navigationBarTitleText": "设置"
+		}
+	},{
 		"path": "pages/productDetails/productDetails",
 		"style": {
 			"navigationBarTitleText": "商品详情"
