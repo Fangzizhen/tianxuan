@@ -59,7 +59,7 @@
 			<view class="ordinary"  v-if="user_type == 1">
 				<view class="order_title">
 					<text class="name">我的订单</text>
-					<view class="operation">
+					<view class="operation"  @click="navOrder">
 						<text>全部订单</text>
 						<image src="../../static/images/icon-gengduo.png" mode=""></image>
 					</view>
@@ -203,7 +203,7 @@
 		data() {
 			return {
 				recommendList:[],//推荐商品
-				user_type:2
+				user_type:1
 			}
 		},
 		created() {
@@ -214,6 +214,12 @@
 			navSetup() {
 				uni.navigateTo({
 					url: '/pages/mine/mineSetup'
+				})
+			},
+			//跳转设置列表
+			navOrder() {
+				uni.navigateTo({
+					url: '/pages/mine/orderList'
 				})
 			},
 			// 获取推荐商品数据

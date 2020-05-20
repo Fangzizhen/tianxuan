@@ -231,7 +231,15 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../common/reque
 var _default = { data: function data() {return { data: [], //全部数据
       banner_list: [], //banner列表
       bgColor: "", //header背景颜色
-      navigation: [], //商品分类列表
+      navigation: [// {icon:"../../static/images/index/icon-shuguo.png"},
+        // {icon:"../../static/images/index/icon-shengxian.png"},
+        // {icon:"../../static/images/index/icon-nongjia.png"},
+        // {icon:"../../static/images/index/icon-shipin.png"},
+        // {icon:"../../static/images/index/icon-rihua.png"},
+        // {icon:"../../static/images/index/icon-muying.png"},
+        // {icon:"../../static/images/index/icon-meizhuang.png"},
+        // {icon:"../../static/images/index/icon-baojian.png"},
+      ], //商品分类列表
       recommendList: [] //推荐商品
     };}, created: function created() {this.res();this.getClassification();}, methods: { // 获取数据
     res: function res() {var _this = this; // console.log(request.post)

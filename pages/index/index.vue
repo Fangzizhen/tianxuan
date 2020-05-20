@@ -17,7 +17,7 @@
 		</swiper>
 		<!-- 商品分类 -->
 		<view class="nav_box">
-			<view v-for="(item,index) in navigation" :key="index" :style="{background: item.bg_color}">
+			<view v-for="(item,index) in navigation" :key="index" >
 				<image :src="item.icon" mode=""></image>
 			</view>
 		</view>
@@ -50,7 +50,16 @@
 				data: [], //全部数据
 				banner_list: [], //banner列表
 				bgColor: "", //header背景颜色
-				navigation: [] ,//商品分类列表
+				navigation: [
+					// {icon:"../../static/images/index/icon-shuguo.png"},
+					// {icon:"../../static/images/index/icon-shengxian.png"},
+					// {icon:"../../static/images/index/icon-nongjia.png"},
+					// {icon:"../../static/images/index/icon-shipin.png"},
+					// {icon:"../../static/images/index/icon-rihua.png"},
+					// {icon:"../../static/images/index/icon-muying.png"},
+					// {icon:"../../static/images/index/icon-meizhuang.png"},
+					// {icon:"../../static/images/index/icon-baojian.png"},
+				] ,//商品分类列表
 				recommendList:[]//推荐商品
 			}
 		},
@@ -121,14 +130,14 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-
 			image {
 				width: 32rpx;
 				height: 32rpx;
 			}
-
 			input {
+				height: 60rpx;
 				flex: 1;
+				font-size: 28rpx;
 				margin-left: 4rpx;
 			}
 		}

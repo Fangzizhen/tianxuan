@@ -96,6 +96,7 @@
 				var that = this;
 				that.catrgory = []
 				var data = that.catrgoryList
+				console.log(data)
 				that.category_id = id
 				console.log(id)
 				var arr = [];

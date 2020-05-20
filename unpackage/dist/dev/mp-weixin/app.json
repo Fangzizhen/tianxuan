@@ -3,6 +3,7 @@
     "uni-icons": "/components/uni-icons/uni-icons"
   }
 }g/shopping",
+    "pages/login/login",
     "pages/mine/mine",
     "pages/mine/mineSetup",
     "pages/productDetails/productDetails",

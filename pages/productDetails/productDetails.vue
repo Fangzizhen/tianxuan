@@ -63,7 +63,7 @@
 				<image class="navto" src="../../static/images/detail/collection.png" mode=""></image>
 			</view>
 			<view class="btn_box" v-if="user_type == 0">
-				<view class="join">加入购物车</view>
+				<view class="join" @click="toggleSpec">加入购物车</view>
 				<view class="purchase">立即购买</view>
 			</view>
 			<view class="btn_box_vip" v-else>
@@ -132,7 +132,7 @@
 			return {
 				goods: [], //全部数据
 				banner_list: [], //banner列表
-				user_type: 1,
+				user_type: 0,
 				specClass: 'none',
 				specifications: [], //产品规格信息
 				popup_type: 1, //弹窗Type

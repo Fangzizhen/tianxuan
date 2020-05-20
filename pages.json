@@ -32,6 +32,11 @@
 			"navigationBarTitleText": "个人中心"
 		}
 	},{
+		"path": "pages/mine/orderList",
+		"style": {
+			"navigationBarTitleText": "我的订单"
+		}
+	},{
 		"path": "pages/mine/mineSetup",
 		"style": {
 			"navigationBarTitleText": "设置"
