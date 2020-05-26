@@ -8,15 +8,15 @@
 				<image class="setup" src="../../static/images/icon-shezhi.png" @tap="navSetup"></image>
 			</view>
 			<view class="collection_list">
-				<view class="collection">
+				<view class="collection" @click="navToCollection('shoucang')">
 					<text class="collection_number">269</text>
 					<text class="collection_name">收藏夹</text>
 				</view>
-				<view class="collection">
+				<view class="collection" @click="navToCollection('zuji')">
 					<text class="collection_number">269</text>
 					<text class="collection_name">足迹</text>
 				</view>
-				<view class="collection">
+				<view class="collection" @click="navToCollection('fenxiang')">
 					<text class="collection_number">269</text>
 					<text class="collection_name">我的分享</text>
 				</view>
@@ -31,19 +31,33 @@
 			</view>
 		</view>
 		<!-- 余额列表 -->
-		<view class="balance_list"  v-if="user_type !== 1">
-			<view class="balance">
+		<view class="balance_list"  v-if="user_type == 2">
+			<navigator class="balance" open-type="navigate" url="../wallet/balance">
 				<view class="balance_number"><text class="symbol">￥</text>269</view>
 				<text class="balance_name">余额</text>
-			</view>
-			<view class="balance">
+			</navigator>
+			<navigator class="balance" open-type="navigate" url="../wallet/balance">
+				<view class="balance_number"><text class="symbol">￥</text>269</view>
+				<text class="balance_name">可提现余额</text>
+			</navigator>
+			<navigator class="balance" open-type="navigate" url="../wallet/tianmibao">
 				<view class="balance_number"><text class="symbol">￥</text>269</view>
 				<text class="balance_name">添米宝</text>
-			</view>
-			<view class="balance">
+			</navigator>
+		</view>
+		<view class="balance_list"  v-if="user_type == 3">
+			<navigator class="balance" open-type="navigate" url="../wallet/balance">
+				<view class="balance_number"><text class="symbol">￥</text>269</view>
+				<text class="balance_name">余额</text>
+			</navigator>
+			<navigator class="balance" open-type="navigate" url="../wallet/tianmibao">
+				<view class="balance_number"><text class="symbol">￥</text>269</view>
+				<text class="balance_name">添米宝</text>
+			</navigator>
+			<navigator class="balance" open-type="navigate" url="../mine/contribution">
 				<view class="balance_number"><text class="symbol">￥</text>269</view>
 				<text class="balance_name">贡献值</text>
-			</view>
+			</navigator>
 		</view>
 		<!-- 邀请好友 -->
 		<view class="invitation">
@@ -51,7 +65,7 @@
 				<view>邀请好友注册</view>
 				<text>认购可省钱 分享可赚钱</text>
 			</view>
-			<view class="btn">立即邀请</view>
+			<view class="btn" @click="navToCollection('zhaomuling')">立即邀请</view>
 		</view>
 		<!-- 订单中心 -->
 		<view class="order_center">
@@ -59,34 +73,34 @@
 			<view class="ordinary"  v-if="user_type == 1">
 				<view class="order_title">
 					<text class="name">我的订单</text>
-					<view class="operation"  @click="navOrder">
+					<view class="operation"  @click="navOrder(0)">
 						<text>全部订单</text>
 						<image src="../../static/images/icon-gengduo.png" mode=""></image>
 					</view>
 				</view>
 				<view class="ordinary_list">
-					<view class="operation_btn">
+					<view class="operation_btn" @click="navOrder(1)">
 						<image src="../../static/images/icon-daifukuan.png"></image>
 						<view class="operation_txt">
 							<view>待付款</view>
 							<text>Obligation</text>
 						</view>
 					</view>
-					<view class="operation_btn">
+					<view class="operation_btn" @click="navOrder(2)">
 						<image src="../../static/images/icon-daifahuo.png"></image>
 						<view class="operation_txt">
 							<view>待发货</view>
 							<text>Wait deliver</text>
 						</view>
 					</view>
-					<view class="operation_btn">
+					<view class="operation_btn" @click="navOrder(3)">
 						<image src="../../static/images/icon-daishouhuo.png"></image>
 						<view class="operation_txt">
 							<view>待收货</view>
 							<text>Wait  receive</text>
 						</view>
 					</view>
-					<view class="operation_btn">
+					<view class="operation_btn" @click="afterSales">
 						<image src="../../static/images/icon-shouhou.png"></image>
 						<view class="operation_txt">
 							<view>售后中心</view>
@@ -97,87 +111,86 @@
 			</view>
 			<!-- 合伙人 -->
 			<view class="partner"  v-if="user_type == 2">
-				<view class="order_title">
+				<view class="order_title"  @click="navOrder(0)">
 					<text class="name">订单中心</text>
 					<view class="operation">
 						<image src="../../static/images/icon-gengduo.png" mode=""></image>
 					</view>
 				</view>
 				<view class="ordinary_list">
-					<view class="operation_btn">
+					<view class="operation_btn"  @click="navOrder(0)">
 						<image src="../../static/images/icon-wodedingdan.png"></image>
 						<view class="operation_txt">
 							<view>我的订单</view>
 							<text>My order</text>
 						</view>
 					</view>
-					<view class="operation_btn">
+					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
 						<image src="../../static/images/icon-wodetuijian.png"></image>
 						<view class="operation_txt">
 							<view>我的推荐</view>
 							<text>My recommend</text>
 						</view>
-					</view>
+					</navigator>
 				</view>
 			</view>
 			<!-- 高级合伙人 -->
 			<view class="seniorPartner" v-if="user_type == 3">
-				<view class="order_title">
+				<view class="order_title" @click="navOrder(0)">
 					<text class="name">订单中心</text>
 					<view class="operation">
 						<image src="../../static/images/icon-gengduo.png" mode=""></image>
 					</view>
 				</view>
 				<view class="seniorPartner_list">
-					<view class="operation_btn">
+					<view class="operation_btn" @click="navOrder(0)">
 						<image src="../../static/images/icon-wodedingdan.png"></image>
 						<view class="operation_txt">
 							<view>我的订单</view>
 							<text>My order</text>
 						</view>
 					</view>
-					<view class="operation_btn">
+					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
 						<image src="../../static/images/icon-wodetuijian.png"></image>
 						<view class="operation_txt">
 							<view>我的推荐</view>
 							<text>Myrecommend</text>
 						</view>
-					</view>
-					<view class="operation_btn">
+					</navigator>
+					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myTimi">
 						<image src="../../static/images/icon-tianmi.png"></image>
 						<view class="operation_txt">
 							<view>我的添米</view>
 							<text>Mytianmi</text>
 						</view>
-					</view>
+					</navigator>
 				</view>
 			</view>
+			<!-- 添米中心 -->
 			<view class="partner"  v-if="user_type == 3">
 				<view class="order_title">
 					<text class="name">添米中心</text>
-					<view class="operation">
-						<image src="../../static/images/icon-gengduo.png" mode=""></image>
-					</view>
 				</view>
 				<view class="ordinary_list">
-					<view class="operation_btn">
+					<navigator class="operation_btn" open-type="navigate" url="myMillet">
 						<image src="../../static/images/icon-xiaomi.png"></image>
 						<view class="operation_txt">
 							<view>我的添小米</view>
 							<text>Parter</text>
 						</view>
-					</view>
-					<view class="operation_btn">
+					</navigator>
+					<navigator class="operation_btn" open-type="navigate" url="myRice">
 						<image src="../../static/images/icon-dami.png"></image>
 						<view class="operation_txt">
 							<view>我的添大米</view>
 							<text>Senior parter</text>
 						</view>
-					</view>
+					</navigator>
 				</view>
 			</view>
 		</view>
-		<view class="service"  v-if="user_type !== 1">
+		<!-- 售后 -->
+		<view class="service"  v-if="user_type !== 1" @click="afterSales">
 			<text class="name">售后中心</text>
 				<image src="../../static/images/icon-gengduo.png" mode=""></image>
 		</view>
@@ -203,30 +216,30 @@
 		data() {
 			return {
 				recommendList:[],//推荐商品
-				user_type:1
+				user_type:3
 			}
 		},
 		created() {
 			this.res();
 		},
 		methods: {
+			// 获取推荐商品数据
+			res() {
+				var data = {};
+				request.post('index/index', data).then(res => {
+					this.recommendList = res.data.data_list
+				})
+			},
 			//跳转设置列表
 			navSetup() {
 				uni.navigateTo({
 					url: '/pages/mine/mineSetup'
 				})
 			},
-			//跳转设置列表
-			navOrder() {
+			//跳转订单列表
+			navOrder(current) {
 				uni.navigateTo({
-					url: '/pages/mine/orderList'
-				})
-			},
-			// 获取推荐商品数据
-			res() {
-				var data = {};
-				request.post('index/index', data).then(res => {
-					this.recommendList = res.data.data_list
+					url: '/pages/mine/orderList?current_data='+current
 				})
 			},
 			//跳转详情页
@@ -235,11 +248,22 @@
 					url: '/pages/productDetails/productDetails?goods_id='+id
 				})
 			},
+			//跳转足迹、收藏夹、分享、招募令
+			navToCollection(name) {
+				uni.navigateTo({
+					url: '/pages/mine/collection?name='+name
+				})
+			},
+			afterSales(){
+				uni.navigateTo({
+					url: 'afterSales'
+				})
+			}
 		}
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	.page{
 		font-family: SourceHanSansCN-Regular;
 		.title{
@@ -260,7 +284,6 @@
 					flex: 1;
 					font-size: 32rpx;
 					line-height: 44rpx;
-					font-weight: 500;
 					color: #333;
 				}
 				.setup{
@@ -401,12 +424,19 @@
 			padding: 30rpx 42rpx 28rpx 0rpx;
 			background-color: #FFFFFF;
 		}
+		.order_center>navigator{
+			padding: 30rpx 42rpx 28rpx 0rpx;
+			background-color: #FFFFFF;
+		}
 		// 普通用户
 		.ordinary_list{
 			display: flex;
 			flex-wrap: wrap;
 		}
 		.ordinary_list>view{
+			width: 50%;
+		}
+		.ordinary_list>navigator{
 			width: 50%;
 		}
 		.seniorPartner{
@@ -416,6 +446,9 @@
 			display: flex;
 		}
 		.seniorPartner_list>view{
+			flex: 1;
+		}
+		.seniorPartner_list>navigator{
 			flex: 1;
 		}
 		.operation_btn{
@@ -491,7 +524,6 @@
 					position: relative;
 					.title{
 						font-size:28rpx;
-						font-weight:400;
 						color:rgba(0,0,0,1);
 						line-height:40rpx;
 						text-overflow: -o-ellipsis-lastline;
@@ -513,7 +545,6 @@
 						.earn {
 							font-family: SourceHanSansCN-Regular;
 							font-size: 24rpx;
-							font-weight: 400;
 							color: rgba(255, 129, 96, 1);
 							line-height: 36rpx;
 							margin-left: 6rpx;

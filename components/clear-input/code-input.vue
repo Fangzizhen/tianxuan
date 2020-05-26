@@ -131,10 +131,13 @@
 				    });
 				    return false;
 				}else{
-					// var data = {};
-					// request.post('useraddress/save', data).then(res => {
-					// 	console.log(res)
-					// })
+					console.log(this.phone)
+					var data = {
+						mobile:this.phone
+					};
+					request.post('user/RegVerifySend', data).then(res => {
+						console.log(res)
+					})
 					this.countDown()
 				}
 				
@@ -142,6 +145,7 @@
 			},
 
 			countDown() {
+				// console.log(11111)
 				const TIME_COUNT = 60;
 				if (!this.timer) {
 					this.count = TIME_COUNT;
@@ -150,6 +154,7 @@
 						if (this.count > 0 && this.count <= TIME_COUNT) {
 							this.count--;
 						} else {
+							// console.log(1111)
 							this.show = true;
 							clearInterval(this.timer);
 							this.timer = null;

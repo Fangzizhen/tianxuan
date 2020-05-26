@@ -1,11 +1,20 @@
-// const commonUrl = "http://ttianxuan.local/"; //公共路径 
-const commonUrl = "/api/"; //公共路径 
+// const commonUrl = "https://api.ttianxuan.com/"; //公共路径 /
+const commonUrl = "/api/"; //请求代理
 
 // post请求封装
 function postRequest(url, data) {
+	uni.showLoading({
+	    title: '加载中...'
+	});
 	var promise = new Promise((resolve, reject) => {
 		var that = this;
-		var postData = data;
+		if(data == "" || data == undefined || data == null){
+			var nullData = {}
+			var postData = JSON.stringify(nullData);   
+		}else{
+			var postData = JSON.stringify(data);   
+		}
+		// var postData = data;
 		var plugins_params = ''
 		var token = ''
 		uni.request({
@@ -16,10 +25,11 @@ function postRequest(url, data) {
 			data: postData,
 			method: "POST",
 			header: {
-				"content-type": "application/x-www-form-urlencoded",
+				"content-type": "application/json; charset=utf-8",
 			},
 			success: function(res) {
 				//返回什么就相应的做调整
+				uni.hideLoading();
 				if (res.statusCode == 200) {
 					resolve(res.data);
 				} else {
@@ -32,6 +42,7 @@ function postRequest(url, data) {
 			},
 			error: function(e) {
 				reject("网络出错");
+				uni.hideLoading();
 			}
 		});
 	});

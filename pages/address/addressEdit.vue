@@ -152,7 +152,7 @@
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	.siyuan{
 		font-family: SourceHanSansCN-Regular;
 	}

@@ -6,7 +6,8 @@
 		<swiper class="swiper" style="height: 100%;" @change='scollSwiper' :current='current'>
 			<swiper-item v-for="(item,index) in items" :key='index'>
 				<!-- 使用 scroll-view 来滚动内容区域 -->
-				<scroll-view scroll-y="true" style="height: 100%;">
+				<scroll-view scroll-y="true" style="height: 100%;" scroll-with-animation="true">
+					<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
 					<view class="order" v-for="(item,index) in ordrtAll" :key="index">
 						<view class="title">
 							<text class="pinlei">{{item.pinlei}}</text>
@@ -25,7 +26,12 @@
 						</view>
 						<view class="statistics">总价<text class="symbol">￥</text><text class="nur">{{item.zongjia}}</text>，优惠<text class="symbol">￥</text><text
 							 class="nur">{{item.youhui}}</text>，实付款<text class="symbol">￥</text><text class="nur">{{item.shiji}}</text></view>
+							 <view class="btn_box">
+							 	<view class="receipt">确认收货</view>
+							 	<view class="logistics"  @click="goLogistics(item.goods_id)">查看物流</view>
+							 </view>
 					</view>
+					</mescroll-body>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -33,15 +39,20 @@
 </template>
 <script>
 	import tabControl from '../../components/tabControl-tag/tabControl-tag.vue';
+	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import request from '../../common/request.js'
 	export default {
+		mixins: [MescrollMixin],
 		components: {
 			tabControl
 		},
 		data() {
 			return {
 				items: ['全部', '待付款', '待发货', '待收货'],
-				current: 0,
+				current: "",
+				page:1,//分页数
 				ordrtAll: [{
+					goods_id:1,
 					pinlei: "时令鲜果",
 					zhuangtai: "卖家已发货",
 					name: "四川眉山9号橙一个长长的名字的展示形式",
@@ -55,14 +66,39 @@
 				}]
 			};
 		},
-		onLoad() {},
+		onLoad: function(option) { //option 为上一页面跳转携带的参数
+		console.log(option)
+		this.current = option.current_data
+		},
 		methods: {
 			onClickItem(val) {
 				this.current = val.currentIndex
 			},
 			scollSwiper(e) {
 				this.current = e.target.current
-			}
+			},
+			goLogistics(id){
+				uni.navigateTo({
+					url: '/pages/mine/logistics?goods_id='+ id
+				})
+			},
+			// 上拉加载和下拉刷新
+			upCallback(page) {
+				console.log(page)
+				var data = {
+					category_id: 1,
+					page: page.num
+				};
+				request.post('search/index', data).then(res => {
+					// var curPageData = res.data.data
+					// this.mescroll.endByPage(curPageData.length, res.data.page_total);
+					if (page.num == 1) this.catrgory = [];
+					// this.catrgory = this.catrgory.concat(curPageData);
+				}).catch(() => {
+					//联网失败, 结束加载
+					this.mescroll.endErr();
+				})
+			},
 		}
 	};
 </script>
@@ -160,6 +196,7 @@
 			.statistics{
 				text-align: right;
 				font-size: 28rpx;
+				margin-bottom: 24rpx;
 				.symbol{
 					font-family: Akrobat-Regular;
 					font-size: 22rpx;
@@ -167,6 +204,28 @@
 				.nur{
 					font-family: Akrobat-Regular;
 					font-size: 28rpx;
+				}
+			}
+			.btn_box{
+				display: flex;
+				flex-direction: row-reverse;
+				text-align: center;
+				font-size: 26rpx;
+				line-height: 50rpx;
+				.receipt{
+					width: 170rpx;
+					height: 50rpx;
+					color: #FF9377;
+					border: 1rpx #FF9377 solid;
+					border-radius: 6rpx;
+					margin-left: 30rpx;
+				}
+				.logistics{
+					width: 170rpx;
+					height: 50rpx;
+					border: 1rpx #979797 solid;
+					color: #979797;
+					border-radius: 6rpx;
 				}
 			}
 		}

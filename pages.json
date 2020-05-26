@@ -1,74 +1,172 @@
 {
 	"pages": [{
-		"path": "pages/index/index",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	}, {
-		"path": "pages/list/list",
-		"style": {
-			"navigationBarTitleText": "全部商品",
-			"app-plus": {
-				"titleNView": {
-					"splitLine": {
-						"color": "#fff"
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/list/list",
+			"style": {
+				"navigationBarTitleText": "全部商品",
+				"app-plus": {
+					"titleNView": {
+						"splitLine": {
+							"color": "#fff"
+						}
 					}
 				}
 			}
-		}
-	}, {
-		"path": "pages/shopping/shopping",
-		"style": {
-			"navigationBarTitleText": "购物车"
-		}
-	},{
-		"path": "pages/login/login",
-		"style": {
-			"navigationBarTitleText": "登录"
-		}
-	}, {
-		"path": "pages/mine/mine",
-		"style": {
-			"navigationBarTitleText": "个人中心"
-		}
-	},{
-		"path": "pages/mine/orderList",
-		"style": {
-			"navigationBarTitleText": "我的订单"
-		}
-	},{
-		"path": "pages/mine/mineSetup",
-		"style": {
-			"navigationBarTitleText": "设置"
-		}
-	},{
-		"path": "pages/productDetails/productDetails",
-		"style": {
-			"navigationBarTitleText": "商品详情"
-		}
-	}, {
-		"path": "pages/productList/productList",
-		"style": {
-			"navigationBarBackgroundColor":"#F8F2F2"
-		}
-	}, {
-		"path": "pages/service/service",
-		"style": {
-			"navigationBarTitleText": "客服"
-		}
-	}, {
-		"path": "pages/address/addressList",
-		"style": {
-			"navigationBarTitleText": "地址管理",
-			"navigationBarBackgroundColor":"#F7F3F1"
-		}
-	}, {
-		"path": "pages/address/addressEdit",
-		"style": {
-			"navigationBarTitleText": "添加收货地址",
-			"navigationBarBackgroundColor":"#F7F3F1"
-		}
-	}],
+		}, {
+			"path": "pages/shopping/shopping",
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		}, {
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		}, {
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		}, {
+			"path": "pages/mine/orderList",
+			"style": {
+				"navigationBarTitleText": "我的订单"
+			}
+		},
+		{
+			"path": "pages/wallet/balance",
+			"style": {
+				"navigationBarTitleText": "我的余额"
+			}
+		},
+		{
+			"path": "pages/wallet/tianmibao",
+			"style": {
+				"navigationBarTitleText": "添米宝"
+			}
+		},
+		{
+			"path": "pages/mine/logistics",
+			"style": {
+				"navigationBarTitleText": "查看物流",
+				"app-plus": {
+					"titleNView": {
+						"splitLine": {
+							"color": "#fff"
+						}
+					}
+				}
+			}
+		}, {
+			"path": "pages/mine/mineSetup",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		}, {
+			"path": "pages/productDetails/productDetails",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		}, {
+			"path": "pages/productList/productList",
+			"style": {
+				"navigationBarBackgroundColor": "#F8F2F2"
+			}
+		}, {
+			"path": "pages/mine/collection",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		}, {
+			"path": "pages/service/service",
+			"style": {
+				"navigationBarTitleText": "客服"
+			}
+		}, {
+			"path": "pages/address/addressList",
+			"style": {
+				"navigationBarTitleText": "地址管理"
+			}
+		}, {
+			"path": "pages/address/addressEdit",
+			"style": {
+				"navigationBarTitleText": "添加收货地址"
+			}
+		}, {
+			"path": "pages/mine/contribution",
+			"style": {
+				"navigationBarTitleText": "贡献值"
+			}
+		}, {
+			"path": "pages/wallet/withdrawal",
+			"style": {
+				"navigationBarTitleText": "提现"
+			}
+		}, {
+			"path": "pages/wallet/extractSuccess",
+			"style": {
+				"navigationBarTitleText": "提现"
+			}
+		}, {
+			"path": "pages/mine/myMillet",
+			"style": {
+				"navigationBarTitleText": "我的小米"
+			}
+		}, {
+			"path": "pages/mine/myRice",
+			"style": {
+				"navigationBarTitleText": "我的大米"
+			}
+		}, {
+			"path": "pages/mine/personal",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/mine/bankCard",
+			"style": {
+				"navigationBarTitleText": "银行卡管理"
+			}
+		}, {
+			"path": "pages/mine/telphoneCode",
+			"style": {}
+		}, {
+			"path": "pages/mine/cardTips",
+			"style": {
+				"navigationBarTitleText": "银行卡管理"
+			}
+		}, {
+			"path": "pages/mine/afterSales",
+			"style": {
+				"navigationBarTitleText": "售后中心"
+			}
+		}, {
+			"path": "pages/mine/afterSalseDetail",
+			"style": {
+				"navigationBarTitleText": "申请售后"
+			}
+		}, {
+			"path": "pages/shopping/shoppingOrder",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+			}
+		},{
+			"path" : "pages/mine/myTimi",
+			"style" : {
+				"navigationBarTitleText": "我的添米"
+			}
+      }
+        ,{
+            "path" : "pages/mine/myRecommend",
+            "style" : {
+							"navigationBarTitleText": "我的推荐"
+						}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "添选",
@@ -105,14 +203,12 @@
 			}
 		]
 	},
-	"condition" : { //模式配置，仅开发期间生效
+	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "", //模式名称
-				"path": "", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }

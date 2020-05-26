@@ -70,12 +70,14 @@
 			getClassification() {
 				var data = {};
 				request.post('goods/category', data).then(res => {
+					console.log(res)
 					this.catrgoryList = res.data
 					this.chooseGoods(res.data[0].id)
 				})
 			},
 			// 获取列表数据
 			getList(data) {
+				console.log("获取数据列表")
 				var data = data;
 				request.post('search/index', data).then(res => {
 					console.log(res)
@@ -96,16 +98,17 @@
 				var that = this;
 				that.catrgory = []
 				var data = that.catrgoryList
-				console.log(data)
+				console.log(data,"hahha")
 				that.category_id = id
-				console.log(id)
+				console.log(id,"品类id")
 				var arr = [];
 				for (var i = 0; i < data.length; i++) {
 					if (id == data[i].id) {
 						var itemLength = data[i].items.length
-						console.log(itemLength)
+						console.log(itemLength,"item的长度")
 						arr = data[i].items
-						if(itemLength != "11"){
+						if(itemLength == 0){
+							console.log("获取商品列表")
 							var postData={
 								category_id:id,
 								page:that.page
@@ -154,7 +157,7 @@
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	.page {
 		.category-wrapper {
 			width: 100%;
@@ -179,14 +182,11 @@
 						align-items: center;
 						cursor: pointer;
 						font-size: 26rpx;
-						font-weight: 400;
 						line-height: 36rpx;
-						font-weight:400;
 						.title-english{
 							font-family: uniicons;
 							font-size: 22rpx;
 							line-height: 32rpx;
-							font-weight:400;
 							letter-spacing: 6rpx;
 						}
 						&.onSelected {
@@ -254,7 +254,6 @@
 								position: relative;
 								.title{
 									font-size:24rpx;
-									font-weight:400;
 									color:rgba(0,0,0,1);
 									line-height:40rpx;
 									text-overflow: -o-ellipsis-lastline;
@@ -275,7 +274,6 @@
 									.earn{
 										font-family: SourceHanSansCN-Regular;
 										font-size: 24rpx;
-										font-weight: 400;
 										color:rgba(255,129,96,1);
 										line-height:36rpx;
 										margin-left: 6rpx;

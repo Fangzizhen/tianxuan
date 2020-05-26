@@ -25,7 +25,7 @@
 			<view class="settlement_box">
 				<view class="settlement_txt">合计:<view class="symbol">￥<text class="price">{{total}}</text><text class="save">（省{{saveMoney}}）</text></view>
 				</view>
-				<view class="settlement_btn">结算( {{totalNum}} )</view>
+				<view class="settlement_btn" @click="createOrder">结算( {{totalNum}} )</view>
 			</view>
 		</view>
 	</view>
@@ -54,6 +54,7 @@
 				totalNum:0,//总件数
 				allChecked: false, //全选状态  true|false
 				cartList: [{
+					pinlei: "精品服饰",
 						attr_val: "春装款 L",
 						checked: false,
 						id: 1,
@@ -66,6 +67,7 @@
 						save:12,
 					},
 					{
+						pinlei: "精品服饰",
 						attr_val: "春装款 L",
 						checked: false,
 						id: 2,
@@ -81,8 +83,8 @@
 			}
 		},
 		onShow : function() {
-				var loginRes = this.checkLogin('2');
-				if(!loginRes){return false;}
+				// var loginRes = this.checkLogin('2');
+				// if(!loginRes){return false;}
 			},
 		methods: {
 			onClick(e) {
@@ -113,10 +115,6 @@
 			//计算总价
 			calcTotal() {
 				let list = this.cartList;
-				// if(list.length === 0){
-				// 	this.empty = true;
-				// 	return;
-				// }
 				let total = 0;
 				let totalNum = 0;
 				let saveMoney = 0;
@@ -130,16 +128,44 @@
 						checked = false;
 					}
 				})
+				
 				this.allChecked = checked;
-				this.total = Number(total.toFixed(2));
+				this.total = this.$api.cutOutNum(total);
 				this.totalNum =totalNum
 				this.saveMoney =saveMoney
+			},
+			//创建订单
+			createOrder(){
+				let list = this.cartList;
+				let goodsData = [];
+				list.forEach(item=>{
+					if(item.checked){
+						goodsData.push(item)
+					}
+				})
+				console.log(goodsData)
+				if(goodsData == null || goodsData == '' || goodsData == undefined){
+					 this.$api.msg("请选择商品")
+					 return
+				} 
+				var orderData = {
+					total: this.total,
+					totalNum:this.totalNum,
+					saveMoney: this.saveMoney,
+					item:goodsData
+				}
+				console.log(orderData)
+				uni.navigateTo({
+					url: '/pages/shopping/shoppingOrder?data='+ encodeURIComponent(JSON.stringify(orderData))
+					})
+				
+				// this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	.page {
 		width: 100%;
 		height: 100%;
@@ -159,7 +185,6 @@
 			.img {
 				width: 144rpx;
 				height: 176rpx;
-				background-color: #4CD964;
 				margin-left: 20rpx;
 				margin-right: 16rpx;
 			}

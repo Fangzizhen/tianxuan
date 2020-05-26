@@ -112,7 +112,6 @@
 
 					.title {
 						font-size: 28rpx;
-						font-weight: 400;
 						color: rgba(0, 0, 0, 1);
 						line-height: 40rpx;
 						text-overflow: -o-ellipsis-lastline;
@@ -135,7 +134,6 @@
 							font-family: SourceHanSansCN-Regular;
 							margin-left: 6rpx;
 							font-size: 24rpx;
-							font-weight: 400;
 							color: rgba(255, 129, 96, 1);
 							line-height: 36rpx;
 							text {

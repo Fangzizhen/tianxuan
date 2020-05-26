@@ -20,7 +20,7 @@
 		name:'tabControl',
 		props:{
 			current: {
-				type: Number,
+				type: [Number, String],
 				default: 0
 			},
 			values: {
@@ -68,22 +68,15 @@
 				uni.getSystemInfo({
 				    success: (res)=> {
 						this.windowWidth = res.windowWidth;
-				        // console.log(this.windowWidth);
 						this.values.forEach((i,v)=>{
 							let info = uni.createSelectorQuery().in(this);
 							info.select("#item"+v).boundingClientRect((res)=>{
-								// 获取第一个元素到左边的距离
-								// if(v==0){
-								// 	this.startLenght = res.left
-								// }
 							    this.widthList.push(res.width)
 								this.leftList.push(res.left)
 								
 							}).exec()
 							
 						})
-						// console.log(this.leftList)
-						// console.log(this.widthList)
 				    }
 				});
 			})
@@ -189,11 +182,7 @@
 			margin-right: 24rpx;
 		}
 		.thisOpenSelect{
-			text{
-				// color: #333;
-				// font-weight:600;
-				// font-size: 32rpx;
-			}
+			
 			.activeLine{
 				opacity: 1;
 			}

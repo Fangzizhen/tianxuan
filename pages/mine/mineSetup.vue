@@ -1,6 +1,6 @@
 <template>
 	<view class="content ">
-			<navigator  class="navto" url="../address/addressList" open-type="navigate">
+			<navigator  class="navto" url="personal" open-type="navigate">
 				<text>个人信息</text>
 				<image src="../../static/images/icon-gengduo.png" mode=""></image>
 			</navigator>
@@ -8,7 +8,7 @@
 				<text>地址管理</text>
 				<image src="../../static/images/icon-gengduo.png" mode=""></image>
 			</navigator>
-			<navigator  class="navto" url="../address/addressList" open-type="navigate">
+			<navigator  class="navto" url="bankCard" open-type="navigate">
 				<text>银行卡管理</text>
 				<image src="../../static/images/icon-gengduo.png" mode=""></image>
 			</navigator>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-	import request from '../../common/request.js'
 	export default {
 		data() {
 			return {
@@ -34,22 +33,14 @@
 			}
 		},
 		onLoad(option) {
-			this.res()
 		},
 		methods: {
-			res() {
-				var data = {
-					pid:0
-				};
-				request.post('region/index', data).then(res => {
-					console.log(res)
-				})
-			},
+			
 		}
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 .content{
 	border-top: 1rpx solid #DBDBDB;
 	.navto{

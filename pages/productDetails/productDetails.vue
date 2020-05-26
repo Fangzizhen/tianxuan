@@ -184,7 +184,7 @@
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	.page {
 		.swiper {
 			width: 100%;
@@ -223,7 +223,6 @@
 						font-family: SourceHanSansCN-Regular;
 						margin-left: 16rpx;
 						font-size: 26rpx;
-						font-weight: 400;
 						color: rgba(255, 129, 96, 1);
 						line-height: 36rpx;
 
@@ -433,7 +432,6 @@
 						font-family: SourceHanSansCN-Regular;
 						margin-left: 16rpx;
 						font-size: 22rpx;
-						font-weight: 400;
 						color: rgba(255, 129, 96, 1);
 						line-height: 36rpx;
 

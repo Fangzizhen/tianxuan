@@ -1,6 +1,6 @@
 {
-    "name" : "tx_items",
-    "appid" : "",
+    "name" : "添选",
+    "appid" : "__UNI__9509B61",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -60,20 +60,22 @@
     },
     "h5" : {
         "router" : {
-            "base" : ""
+            "base" : "",
+            "mode" : "history"
         },
-        "devServer" : {
-            "proxy" : {
-                "/api" : {
-                    "target" : "http://ttianxuan.local/",
-                    "changeOrigin" : true, //是否跨域
-                    "secure" : true, // 设置支持https协议的代理
-                    "pathRewrite" : {
-                        "^/api" : "/"
-                    }
-                }
-            },
-            "disableHostCheck" : true
-        }
+        "title" : "添选",
+        "domain" : "ttianxuan.com",
+				"devServer" : {
+					"proxy" : {
+							"/api" : {
+									"target" : "https://api.ttianxuan.com/",
+									"changeOrigin" : true, //是否跨域
+									"secure" : true, // 设置支持https协议的代理
+									"pathRewrite" : {
+											"^/api" : "/"
+									}
+							}
+					}
+			}
     }
 }

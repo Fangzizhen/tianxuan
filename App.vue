@@ -37,7 +37,9 @@
 		margin: 0;
 		padding: 0;
 	}
-
+	ul,li{
+		list-style: none;
+	}
 	/* 公共样式 */
 	page {
 		background: #F8F2F2;
@@ -60,5 +62,10 @@
 		box-sizing: border-box;
 	}
 
-
+	.txt{
+		font-family: SourceHanSansCN-Regular;
+	}
+	.num{
+		font-family: Akrobat-Regular;
+	}
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<view class="page">
 		<!-- 头部导航 -->
-		<view class="header" :style="{background: bgColor}">
-			<!-- <view class="header" style="background-image: linear-gradient(to right, red , white)"> -->
+		<!-- <view class="header" :style="{background: bgColor}"> -->
+			<view class="header" :style="'background-image: linear-gradient(135deg,'+ bgColor+' 0% , white 220%)'">
 			<image class="logo" src="../../static/images/logo.png" mode=""></image>
 			<view class="input_box">
 				<image src="../../static/images/index/icon-sousuo.png" mode=""></image>
@@ -77,6 +77,7 @@
 					this.data = res.data;
 					this.banner_list = res.data.banner_list;
 					this.bgColor = res.data.banner_list[0].bg_color;
+					console.log(res.data.banner_list)
 					// this.navigation = res.data.navigation;
 					this.recommendList = res.data.data_list
 					// console.log(res.data.data_list)
@@ -114,7 +115,7 @@
 	}
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 	// 首页自定义导航栏
 	.header {
 		padding: 14rpx 0rpx;
@@ -178,7 +179,6 @@
 			font-family: SourceHanSansCN-Regular;
 			padding-left: 49rpx;
 			font-size:40rpx;
-			font-weight:500;
 			color:rgba(51,51,51,1);
 			line-height:58rpx;
 			position: relative;
@@ -214,7 +214,6 @@
 				position: relative;
 				.title{
 					font-size:28rpx;
-					font-weight:400;
 					color:rgba(0,0,0,1);
 					line-height:40rpx;
 					text-overflow: -o-ellipsis-lastline;
@@ -236,7 +235,6 @@
 					.earn {
 						font-family: SourceHanSansCN-Regular;
 						font-size: 24rpx;
-						font-weight: 400;
 						color: rgba(255, 129, 96, 1);
 						line-height: 36rpx;
 						margin-left: 6rpx;

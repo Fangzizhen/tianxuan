@@ -231,12 +231,16 @@ var _default = { mixins: [_mescrollMixins.default], data: function data() {retur
       catrgory: [], //其他列表
       select_index: 0, makeup: true, page: 1, //分页数
       category_id: "" };}, onLoad: function onLoad() {this.getClassification();}, methods: { // 获取分类数据
-    getClassification: function getClassification() {var _this = this;var data = {};_request.default.post('goods/category', data).then(function (res) {_this.catrgoryList = res.data;_this.chooseGoods(res.data[0].id);});}, // 获取列表数据
-    getList: function getList(data) {var _this2 = this;var data = data;_request.default.post('search/index', data).then(function (res) {console.log(res);_this2.catrgory = res.data.data;_this2.makeup = false;});}, // 选择分类
+    getClassification: function getClassification() {var _this = this;var data = {};_request.default.post('goods/category', data).then(function (res) {console.log(res);_this.catrgoryList = res.data;_this.chooseGoods(res.data[0].id);});}, // 获取列表数据
+    getList: function getList(data) {var _this2 = this;console.log("获取数据列表");var data = data;_request.default.post('search/index', data).then(function (res) {console.log(res);_this2.catrgory = res.data.data;_this2.makeup = false;});}, // 选择分类
     choose: function choose(index, id) {if (this.select_index === index) {return;}this.select_index = index;this.chooseGoods(id);}, // 分类对应商品
-    chooseGoods: function chooseGoods(id) {var that = this;that.catrgory = [];var data = that.catrgoryList;that.category_id = id;console.log(id);var arr = [];for (var i = 0; i < data.length; i++) {if (id == data[i].id) {var itemLength = data[i].items.length;console.log(itemLength);
+    chooseGoods: function chooseGoods(id) {var that = this;that.catrgory = [];var data = that.catrgoryList;console.log(data, "hahha");that.category_id = id;console.log(id, "品类id");var arr = [];for (var i = 0; i < data.length; i++) {
+        if (id == data[i].id) {
+          var itemLength = data[i].items.length;
+          console.log(itemLength, "item的长度");
           arr = data[i].items;
-          if (itemLength != "11") {
+          if (itemLength == 0) {
+            console.log("获取商品列表");
             var postData = {
               category_id: id,
               page: that.page };
