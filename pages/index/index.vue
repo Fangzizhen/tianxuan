@@ -17,7 +17,7 @@
 		</swiper>
 		<!-- 商品分类 -->
 		<view class="nav_box">
-			<view v-for="(item,index) in navigation" :key="index" >
+			<view v-for="(item,index) in navigation" :key="index" @tap="navToDetailList(item.id,item.items)">
 				<image :src="item.icon" mode=""></image>
 			</view>
 		</view>
@@ -50,16 +50,7 @@
 				data: [], //全部数据
 				banner_list: [], //banner列表
 				bgColor: "", //header背景颜色
-				navigation: [
-					// {icon:"../../static/images/index/icon-shuguo.png"},
-					// {icon:"../../static/images/index/icon-shengxian.png"},
-					// {icon:"../../static/images/index/icon-nongjia.png"},
-					// {icon:"../../static/images/index/icon-shipin.png"},
-					// {icon:"../../static/images/index/icon-rihua.png"},
-					// {icon:"../../static/images/index/icon-muying.png"},
-					// {icon:"../../static/images/index/icon-meizhuang.png"},
-					// {icon:"../../static/images/index/icon-baojian.png"},
-				] ,//商品分类列表
+				navigation: [] ,//商品分类列表
 				recommendList:[]//推荐商品
 			}
 		},
@@ -95,7 +86,15 @@
 			},
 			// 搜索框点击确定动作
 			search(e) {
-				console.log(e.detail.value)
+				var keywords
+				if(e.detail.value == "" || e.detail.value == null || e.detail.value == undefined){
+					keywords = this.data.common_shop_notice
+				}else{
+					keywords = e.detail.value
+				}
+				uni.navigateTo({
+					url: '/pages/index/searchList?keywords='+encodeURIComponent(JSON.stringify(keywords))
+				})
 			},
 			// 轮播图改变
 			swiperChange(e) {
@@ -106,6 +105,12 @@
 			navToDetailPage(id) {
 				uni.navigateTo({
 					url: '/pages/productDetails/productDetails?goods_id='+id
+				})
+			},
+			//跳转分类页
+			navToDetailList(id,item) {
+				uni.navigateTo({
+					url: '/pages/productList/productList?goods_id=' + id +'&classification=' + encodeURIComponent(JSON.stringify(item))
 				})
 			},
 			share(){

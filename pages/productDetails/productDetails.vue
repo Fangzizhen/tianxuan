@@ -18,9 +18,7 @@
 				<view class="reason">
 					<text class="reason_title">推荐理由</text>
 					<view class="reason_content">
-						<view><text class="reason_index">1</text>(有字段simple_desc，无数据)</view>
-						<view><text class="reason_index">1</text>呵护胎儿健康 叶酸搭配复合营养素</view>
-						<view><text class="reason_index">1</text>呵护胎儿健康 叶酸搭配复合营养素</view>
+						<view v-html="goods.simple_desc"></view>
 					</view>
 				</view>
 			</view>
@@ -94,15 +92,17 @@
 							<text class="tips">请选择规格</text>
 						</view>
 					</view>
-					<view v-for="(item,index) in specifications" :key="index" class="attr-list">
-						<text class="attr_name">{{item.name}}</text>
-						<view class="item-list">
-							<text v-for="(childItem, childIndex) in item.value" :key="childIndex" class="tit" @click="selectSpec(item.name,childItem.name, childItem.inventory)"
-							 :class=" inventory === childItem.inventory? 'selected':' '">
-								{{childItem.name}}
-							</text>
+						<view>
+							<view v-for="(item,index) in specifications" :key="index" class="attr-list">
+								<text class="attr_name">{{item.name}}</text>
+								<view class="item-list">
+									<text v-for="(childItem, childIndex) in item.value" :key="childIndex" class="tit" @click="selectSpec(item.name,childItem.name, childItem.inventory)"
+									 :class=" inventory === childItem.inventory? 'selected':' '">
+										{{childItem.name}}
+									</text>
+								</view>
+							</view>
 						</view>
-					</view>
 					<view class="number_box">
 						<text class="attr_name">数量</text>
 						<uni-number-box></uni-number-box>
@@ -167,17 +167,18 @@
 			},
 			stopPrevent() {},
 			selectSpec(type, name, inventory) {
-				this.inventory = inventory; 
+				console.log(inventory)
+				this.inventory = inventory;
 				var specType = [{
-						type: type,
-						value: name,
-					}, ]
+					type: type,
+					value: name,
+				}, ]
 				var data = {
 					id: this.goods.id,
 					spec: JSON.stringify(specType)
 				}
-				request.post('goods/spectype', data).then(res => {
-					console.log(res.data);
+				request.post('goods/specdetail', data).then(res => {
+					console.log(res);
 				})
 			}
 		}
@@ -285,12 +286,12 @@
 							font-size: 24rpx;
 							line-height: 34rpx;
 
-							.reason_index {
-								font-size: 22rpx;
-								font-family: Akrobat-Regular;
-								line-height: 30rpx;
-								margin-right: 8rpx;
-							}
+							// .reason_index {
+							// 	font-size: 22rpx;
+							// 	font-family: Akrobat-Regular;
+							// 	line-height: 30rpx;
+							// 	margin-right: 8rpx;
+							// }
 						}
 
 						&::after {
@@ -578,7 +579,8 @@
 		.attr-content {
 			.attr-box {
 				padding: 10rpx 30rpx;
-
+				// padding-bottom: 150rpx;
+				position: relative;
 				.a-t {
 					display: flex;
 					align-items: center;
@@ -643,7 +645,7 @@
 					align-items: center;
 					padding-top: 30rpx;
 					padding-left: 10rpx;
-					margin-bottom: 90rpx;
+					margin-bottom: 150rpx;
 
 					.attr_name {
 						font-size: 24rpx;
@@ -652,11 +654,16 @@
 				}
 
 				.btn_box {
-					width: 100%;
+					padding: 0 30rpx;
+					padding-bottom: 40rpx;
 					height: 82rpx;
 					display: flex;
 					text-align: center;
-
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					background-color: #FFFFFF;
 					view {
 						flex: 1;
 						color: #FE7956;

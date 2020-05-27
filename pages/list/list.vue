@@ -15,7 +15,7 @@
 					<!-- 产品区 美妆-->
 					<view class="product-wrapper">
 						<view class="category-content">
-							<view class="product-item" v-for="(p_item,p_index) in product" :key="p_item.id" @tap="enterDetail(p_item.id)">
+							<view class="product-item" v-for="(p_item,p_index) in product" :key="p_item.id" @tap="enterDetail(p_item.id,p_item.items)">
 								<image class="product-img" :src="p_item.icon"></image>
 							</view>
 						</view>
@@ -139,9 +139,9 @@
 				})
 			},
 			// 进入美妆列表
-			enterDetail(id) {
+			enterDetail(id,item) {
 				uni.navigateTo({
-					url: '/pages/productList/productList?goods_id='+id
+					url: '/pages/productList/productList?goods_id='+id + '&classification=' + item
 				})
 			},
 			//跳转详情页

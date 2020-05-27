@@ -26,14 +26,24 @@
 			<view class="title">退/换货说明：</view>
 			<input class="uni-input" placeholder-class="placeholder" placeholder="选填" />
 		</view>
+		<ss-upload-image :url="url" :file-list="fileList" :name="name" ></ss-upload-image>
 	</view>
 </template>
 
 <script>
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
+	import ssUploadImage from '@/components/ss-upload-image/ss-upload-image.vue'
 	export default {
+		components: {
+		  ssUploadImage
+		},
 		data() {
 			return {
+				// ----------------
+				fileList: [],
+				url: '/api/index.php?s=/api/ueditor/index&application=app&application_client_type=weixin&token=""&ajax=ajax',
+				name: 'file',
+				// -------------
 				infoData: {},
 				addressType: 1,
 				addressTypeList: [{
@@ -61,6 +71,35 @@
 			changeType(id) {
 				this.addressType = id;
 			},
+			// -----------------------------
+			// 上传成功
+			onSuccess(res) {
+			  // 响应示例
+			  // {
+			  //    code: 0,
+			  //    data: {
+			  //      image_url: 'http://www.xxxxx.png'
+			  //    },
+			  //    message: '上传成功'
+			  // }
+			  if (res.code === 0) {
+			    this.fileList.push(res.data.image_url)
+			  }
+			  console.log(res)
+			},
+			// 上传进程
+			onProcess(res) {
+			  console.log(res)
+			},
+			// 上传失败
+			onError(err) {
+			  console.log(err)
+			},
+			// 移除
+			onRemove(index) {
+			  this.fileList.splice(index, 1)
+			}
+			// ---------------
 		}
 	}
 </script>

@@ -1,14 +1,6 @@
 <template>
 	<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
 		<view class="page">
-			<!-- 分类图片 -->
-			<image class="title_img" :src="titleImg" mode=""></image>
-			<!-- 商品分类 -->
-			<view class="nav_box" v-if="classification.length != 0">
-				<view v-for="(item,index) in classification" :key="index" @tap="navToDetailList(item.id,item.items)">
-					<image :src="item.icon" mode=""></image>
-				</view>
-			</view>
 			<!-- 商品列表 -->
 			<view class="recommend_box">
 				<view class="recommend" v-for="(recommend,index) in recommendList" :key="index" @tap="navToDetailPage(recommend.id)">
@@ -34,43 +26,29 @@
 				titleImg: "",
 				classification:[], //分类中分类
 				recommendList: [], //推荐商品类表
-				isGoodsEdit: false, // 是否加载编辑后的数据
 				category_id: "",
-				page: 1
+				page: 1,
+				keywords:""
 			}
 		},
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
-			console.log(option); //打印出上个页面传递的参数。
-			this.category_id = option.goods_id
-			if(option.classification != 'undefined'){
-				this.classification = JSON.parse(option.classification)
-			}
-			
-			// var data = {
-			// 	category_id: this.category_id,
-			// 	page: 1
-			// }
+			console.log(option.keywords); //打印出上个页面传递的参数。
+			this.keywords = JSON.parse(option.keywords)
 		},
 		methods: {
 			// 上拉加载和下拉刷新
 			upCallback(page) {
-				// console.log(page)
 				var data = {
-					category_id: this.category_id,
+					keywords:this.keywords,
+					category_id: 0,
 					page: page.num
 				};
 				request.post('search/index', data).then(res => {
-					console.log(res)
-					var category = res.data.category
-					uni.setNavigationBarTitle({
-						title: category.name
-					});
-					this.titleImg = category.big_images
+					console.log(res.data)
 					var curPageData = res.data.data
 					this.mescroll.endByPage(curPageData.length, res.data.page_total);
 					if (page.num == 1) this.recommendList = [];
 					this.recommendList = this.recommendList.concat(curPageData);
-					console.log(this.recommendList)
 				}).catch(() => {
 					//联网失败, 结束加载
 					this.mescroll.endErr();
@@ -83,12 +61,6 @@
 					url: '/pages/productDetails/productDetails?goods_id=' + id
 				})
 			},
-			//跳转分类页
-			navToDetailList(id,item) {
-				uni.redirectTo({
-					url: '/pages/productList/productList?goods_id=' + id +'&classification=' + encodeURIComponent(JSON.stringify(item))
-				})
-			},
 			share() {
 				console.log("分享")
 			}
@@ -98,32 +70,6 @@
 
 <style lang="less">
 	.page {
-		.title_img {
-			width: 100%;
-			height: 350rpx;
-			margin-bottom: 24rpx;
-		}
-		// 分类
-		.nav_box{
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-content: space-around;
-			padding: 25rpx 74rpx;
-			background: #FFFFFF;
-			margin-bottom: 19rpx;
-			view{
-				width: 260rpx;
-				height: 80rpx;
-				margin: 13rpx 0;
-				image{
-					width: 100%;
-					height: 100%;
-				}
-			}
-			
-		}
-
 		.recommend_box {
 			.recommend {
 				height: 248rpx;
@@ -141,7 +87,6 @@
 				.recommend_txt {
 					padding: 15rpx 0;
 					width: 370rpx;
-					// flex: 1;
 					display: flex;
 					flex-direction: column;
 					justify-content: space-between;

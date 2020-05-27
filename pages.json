@@ -73,9 +73,7 @@
 			}
 		}, {
 			"path": "pages/productList/productList",
-			"style": {
-				"navigationBarBackgroundColor": "#F8F2F2"
-			}
+			"style": {}
 		}, {
 			"path": "pages/mine/collection",
 			"style": {
@@ -164,6 +162,12 @@
             "path" : "pages/mine/myRecommend",
             "style" : {
 							"navigationBarTitleText": "我的推荐"
+						}
+        }
+        ,{
+            "path" : "pages/index/searchList",
+            "style" : {
+							"navigationBarTitleText": "搜索结果"
 						}
         }
     ],
