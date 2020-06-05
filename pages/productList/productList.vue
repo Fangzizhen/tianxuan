@@ -12,10 +12,10 @@
 			<!-- 商品列表 -->
 			<view class="recommend_box">
 				<view class="recommend" v-for="(recommend,index) in recommendList" :key="index" @tap="navToDetailPage(recommend.id)">
-					<image class="recommend_img" :src="recommend.images"></image>
+					<image class="recommend_img" :src="recommend.home_recommended_images"></image>
 					<view class="recommend_txt">
-						<text class="title">{{recommend.title}}</text>
-						<text class="price"><text class="symbol">￥</text>{{recommend.min_price}}<text class="earn">/赚<text>3.6</text></text></text>
+						<text class="title" style="text-indent: -10rpx;">{{recommend.title}}</text>
+						<text class="price"><text class="symbol">￥</text>{{recommend.min_price}}<text class="earn" v-if="user_type != undefined && user_type != 0"><text class="earn_icon numgang">/</text>赚<text style=" margin-top: 2rpx;">{{recommend.profit}}</text></text></text>
 						<image src="../../static/images/index/icon-fenxiang.png" @tap.stop="share"></image>
 					</view>
 				</view>
@@ -36,16 +36,21 @@
 				recommendList: [], //推荐商品类表
 				isGoodsEdit: false, // 是否加载编辑后的数据
 				category_id: "",
-				page: 1
+				page: 1,
+				userinfor:[],
+				user_type:'',
 			}
 		},
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
-			console.log(option); //打印出上个页面传递的参数。
+			
 			this.category_id = option.goods_id
 			if(option.classification != 'undefined'){
 				this.classification = JSON.parse(option.classification)
+				console.log(this.classification); //打印出上个页面传递的参数。
 			}
 			
+			this.userinfor = this.get_user_type()
+			this.user_type = this.get_user_type().plugins_distribution_level
 			// var data = {
 			// 	category_id: this.category_id,
 			// 	page: 1
@@ -86,7 +91,7 @@
 			//跳转分类页
 			navToDetailList(id,item) {
 				uni.redirectTo({
-					url: '/pages/productList/productList?goods_id=' + id +'&classification=' + encodeURIComponent(JSON.stringify(item))
+					url: '/pages/productList/ErProductList?goods_id=' + id +'&classification=' + encodeURIComponent(JSON.stringify(item))
 				})
 			},
 			share() {
@@ -110,11 +115,12 @@
 			justify-content: space-between;
 			align-content: space-around;
 			padding: 25rpx 74rpx;
+			padding-left: 78rpx;
 			background: #FFFFFF;
 			margin-bottom: 19rpx;
 			view{
-				width: 260rpx;
-				height: 80rpx;
+				width: 262rpx;
+				height: 88rpx;
 				margin: 13rpx 0;
 				image{
 					width: 100%;
@@ -163,21 +169,36 @@
 						font-size: 40rpx;
 						line-height: 48rpx;
 						color: rgba(0, 0, 0, 1);
+						display: flex;
+						align-items: flex-end;
 						.symbol {
 							font-size: 24rpx;
 							line-height: 34rpx;
 						}
+					
 						.earn {
 							font-family: SourceHanSansCN-Regular;
-							margin-left: 6rpx;
 							font-size: 24rpx;
 							color: rgba(255, 129, 96, 1);
 							line-height: 36rpx;
+							margin-left: 6rpx;
+					
+							.earn_icon {
+								font-family: Akrobat-Regular;
+								font-size: 22rpx;
+								line-height: 36rpx;
+								margin-right: 4rpx;
+								margin-top: -2px;
+								text{
+									
+								}
+							}
+					
 							text {
 								margin-left: 4rpx;
 								font-family: Akrobat-Regular;
 								font-size: 40rpx;
-								line-height: 48rpx;
+								line-height: 40rpx;
 							}
 						}
 					}
@@ -185,7 +206,7 @@
 						width: 48rpx;
 						height: 48rpx;
 						position: absolute;
-						bottom: 10rpx;
+						bottom: 20rpx;
 						right: 0;
 					}
 				}

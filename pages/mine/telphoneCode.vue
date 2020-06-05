@@ -1,4 +1,5 @@
 <template>
+	<!-- 绑定银行卡手机号 -->
 	<view class="page">
 		<view class="form_box">
 			<clearInput label="+86" tag="phone" :value="phone" maxlength="11" placeholder="请输入手机号码" type="number" @getInputValue="getInputValue"

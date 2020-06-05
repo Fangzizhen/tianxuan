@@ -88,28 +88,38 @@ const cutOutNum = (num, decimals) => {
 
 
 // 用户登录状态
-Vue.prototype.checkLogin = function(backpage){
-	var userinfor = uni.getStorageSync('userinfor');
-	
-	if(userinfor == ''){
+Vue.prototype.checkLogin = function(pageUrl){
+	// 获取缓存用户信息
+	var request_user_token = uni.getStorageSync('request_user_token');
+	if(request_user_token == ''){
 		uni.showModal({
 		   title: '未登录',
-		   content: '您未登录，需要登录后才能继续',
+		   content: '您未授权，需要授权后才能继续',
 		    success: function (res) {
 		        if (res.confirm) {
-		           uni.navigateTo({url:'../login/login'});
+		           uni.navigateTo({url:'../login/lod'});
 		           return false;
 		        } else if (res.cancel) {
-		            uni.switchTab({ url: '/pages/index/index'});
+							if(pageUrl == '' || pageUrl == null || pageUrl == undefined ){
+								return
+							}else if(pageUrl == 'navigate'){
+								uni.navigateBack();
+							} else{
+								 uni.switchTab({ url: pageUrl});
+							}
 		        }
 		    }
 		});
 	
+	}else{
+		return request_user_token;
 	}
-	return userinfor;
 }
 
-
+// 获取用户类型
+Vue.prototype.get_user_type = function(pageUrl){
+ return uni.getStorageSync('userinfor');
+}
 
 
 

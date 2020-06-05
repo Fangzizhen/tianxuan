@@ -2,11 +2,11 @@
 	<view class="page">
 		<view class="category-wrapper" v-if="catrgoryList.length>0">
 			<!-- 左边导航 -->
-			<scroll-view scroll-y="true" class="left-wrapper" scroll-with-animation="true">
+			<scroll-view  class="left-wrapper" scroll-with-animation="true">
 				<view class="left-content">
 					<view class="title-content" :class="select_index === index?'onSelected':''" v-for="(title,index) in catrgoryList"
-					 :key="title.id" @tap="choose(index,title.id)"><text>{{title.name}}</text><text class="title-english">English</text></view>
-					 <!-- {{title.vice_name}} -->
+					 :key="title.id" @tap="choose(index,title.id)"><text>{{title.name}}</text><text class="title-english" style="text-align: center;">{{title.vice_name}}</text></view>
+					<!-- {{title.vice_name}} -->
 				</view>
 			</scroll-view>
 			<!-- 右边内容 -->
@@ -24,21 +24,25 @@
 			</scroll-view>
 			<scroll-view scroll-y="true" class="right-wrapper" scroll-with-animation="true" v-else>
 				<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
-				<view class="right-content">
-					<!-- 产品区 非美妆-->
-					<view class="product-wrapper">
-						<view class="category-content">
-							<view class="category-list" v-for="(c_item,c_index) in catrgory" :key="c_item.id" @tap="navToDetailPage(c_item.id)">
-								<image class="category_img" :src="c_item.images" mode=""></image>
-								<view class="category_txt">
-									<text class="title">{{c_item.title}}</text>
-									<text class="price"><text class="symbol">￥</text>{{c_item.min_price}}<text class="earn">/赚<text>3.6</text></text></text>
-									<image src="../../static/images/index/icon-fenxiang.png" @tap.stop="share"></image>
+					<view class="right-content">
+						<!-- 产品区 非美妆-->
+						<view class="product-wrapper">
+							<view class="category-content">
+								<view class="category-list" v-for="(c_item,c_index) in catrgory" :key="c_item.id" @tap="navToDetailPage(c_item.id)">
+									<image class="category_img" :src="c_item.home_recommended_images" mode=""></image>
+									<view class="category_txt">
+										<text class="title" style="text-indent: -10rpx;">{{c_item.title}}</text>
+										<!-- <text class="price"><text class="symbol">￥</text>{{c_item.min_price}}<text class="earn" v-if="user_type != undefined && user_type != 0">/赚<text>{{c_item.profit}}</text></text></text> -->
+										
+										<text class="price"><text class="symbol">￥</text>{{c_item.min_price}}<text class="earn" v-if="user_type != undefined && user_type != 0"><text class="earn_icon numgang">/</text>赚<text>{{c_item.profit}}</text></text></text>
+										
+										
+										<image src="../../static/images/index/icon-fenxiang.png" @tap.stop="share"></image>
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
 				</mescroll-body>
 			</scroll-view>
 		</view>
@@ -58,12 +62,16 @@
 				catrgory: [], //其他列表
 				select_index: 0,
 				makeup: true,
-				page:1,//分页数
-				category_id:""
+				page: 1, //分页数
+				category_id: "",
+				userinfor: [],
+				user_type: '',
 			}
 		},
 		onLoad() {
 			this.getClassification();
+			this.userinfor = this.get_user_type()
+			this.user_type = this.get_user_type().plugins_distribution_level
 		},
 		methods: {
 			// 获取分类数据
@@ -82,7 +90,7 @@
 				request.post('search/index', data).then(res => {
 					console.log(res)
 					this.catrgory = res.data.data
-						this.makeup = false
+					this.makeup = false
 				})
 			},
 			// 选择分类
@@ -91,39 +99,46 @@
 					return;
 				}
 				this.select_index = index;
+				this.catrgory = []
+				
 				this.chooseGoods(id)
+				var page = {
+					num: this.page
+				}
+				// this.upCallback(page)
 			},
 			// 分类对应商品
 			chooseGoods(id) {
 				var that = this;
 				that.catrgory = []
 				var data = that.catrgoryList
-				console.log(data,"hahha")
 				that.category_id = id
-				console.log(id,"品类id")
 				var arr = [];
 				for (var i = 0; i < data.length; i++) {
 					if (id == data[i].id) {
 						var itemLength = data[i].items.length
-						console.log(itemLength,"item的长度")
+						console.log(itemLength, "item的长度")
 						arr = data[i].items
-						if(itemLength == 0){
+						if (itemLength == 0) {
 							console.log("获取商品列表")
-							var postData={
-								category_id:id,
-								page:that.page
+							var postData = {
+								category_id: id,
+								page: that.page
 							}
+							// if(that.makeup == true){
 							that.getList(postData)
-						}else{
-									that.product = arr
-									that.makeup = true
+							// }
+
+						} else {
+							that.product = arr
+							that.makeup = true
 						}
 					}
 				}
 			},
 			// 上拉加载和下拉刷新
 			upCallback(page) {
-				console.log(page)
+				this.catrgory = []
 				var data = {
 					category_id: this.category_id,
 					page: page.num
@@ -133,24 +148,25 @@
 					this.mescroll.endByPage(curPageData.length, res.data.page_total);
 					if (page.num == 1) this.catrgory = [];
 					this.catrgory = this.catrgory.concat(curPageData);
+					this.makeup = false
 				}).catch(() => {
 					//联网失败, 结束加载
 					this.mescroll.endErr();
 				})
 			},
 			// 进入美妆列表
-			enterDetail(id,item) {
+			enterDetail(id, item) {
 				uni.navigateTo({
-					url: '/pages/productList/productList?goods_id='+id + '&classification=' + item
+					url: '/pages/productList/productList?goods_id=' + id + '&classification=' + item
 				})
 			},
 			//跳转详情页
 			navToDetailPage(id) {
 				uni.navigateTo({
-					url: '/pages/productDetails/productDetails?goods_id='+id
+					url: '/pages/productDetails/productDetails?goods_id=' + id
 				})
 			},
-			share(){
+			share() {
 				console.log("分享")
 			}
 		}
@@ -173,6 +189,7 @@
 				flex: 0 0 161rpx;
 
 				.left-content {
+					margin-top: 45rpx;
 					.title-content {
 						width: 100%;
 						height: 100rpx;
@@ -183,15 +200,11 @@
 						cursor: pointer;
 						font-size: 26rpx;
 						line-height: 36rpx;
-						.title-english{
-							font-family: uniicons;
-							font-size: 22rpx;
-							line-height: 32rpx;
-							letter-spacing: 6rpx;
-						}
+						margin-bottom: 25rpx;
 						&.onSelected {
 							position: relative;
 							color: #FFA68F;
+
 							&::before {
 								content: '';
 								position: absolute;
@@ -203,6 +216,59 @@
 								background: linear-gradient(124deg, #FFA68F 0%, #fb7c22 100%);
 							}
 						}
+						
+					}
+					.title-english{
+						font-family: Akrobat-Regular;
+						margin-top: 5rpx;
+					}
+					.title-content:nth-child(1) .title-english , {
+						letter-spacing: 6rpx;
+						font-size: 24rpx;
+						line-height: 32rpx;
+						padding-left: 4rpx;
+					}
+					.title-content:nth-child(5) .title-english{
+						letter-spacing: 6rpx;
+						font-size: 24rpx;
+						line-height: 32rpx;
+						padding-left: 8rpx;
+					}
+
+					.title-content:nth-child(2) .title-english{
+						// margin-top: 4rpx;
+						font-size: 24rpx;
+						line-height: 26rpx;
+					}
+					.title-content:nth-child(3) .title-english{
+						// margin-top: 2rpx;
+						font-size: 24rpx;
+						line-height: 26rpx;
+					}
+					.title-content:nth-child(4) .title-english {
+						letter-spacing: 4rpx;
+						font-size: 24rpx;
+						line-height: 32rpx;
+						padding-left: 3px;
+					}
+					.title-content:nth-child(8) .title-english{
+						letter-spacing: 2rpx;
+						font-size: 24rpx;
+						line-height: 32rpx;
+					}
+					.title-content:nth-child(6) .title-english {
+						letter-spacing:0.8px;
+						font-size: 24rpx;
+						line-height: 32rpx;
+					}
+					.title-content:nth-child(7) .title-english {
+						letter-spacing: 8rpx;
+						font-size: 24rpx;
+						line-height: 32rpx;
+						padding-left: 2rpx;
+				
+						padding-left: 4px;
+						// margin-left: 1rpx;
 					}
 				}
 			}
@@ -226,8 +292,8 @@
 
 							.product-item {
 								margin-top: 98rpx;
-								width: 260rpx;
-								height: 86rpx;
+								width: 265rpx;
+								height: 88rpx;
 
 								.product-img {
 									width: 100%;
@@ -240,52 +306,76 @@
 							width: 100%;
 							padding: 26rpx 34rpx;
 							display: flex;
-							.category_img{
+
+							.category_img {
 								width: 218rpx;
 								height: 218rpx;
 								margin-right: 13rpx;
 							}
-							.category_txt{
+
+							.category_txt {
 								padding: 15rpx 0;
 								flex: 1;
 								display: flex;
 								flex-direction: column;
 								justify-content: space-between;
 								position: relative;
-								.title{
-									font-size:24rpx;
-									color:rgba(0,0,0,1);
-									line-height:40rpx;
+
+								.title {
+									font-size: 24rpx;
+									color: rgba(0, 0, 0, 1);
+									line-height: 40rpx;
 									text-overflow: -o-ellipsis-lastline;
 									overflow: hidden;
 									text-overflow: ellipsis;
-									display: -webkit-box;/*重点，不能用block等其他*/
-									-webkit-line-clamp: 2;/*重点IE和火狐不支持*/
-									-webkit-box-orient: vertical;/*重点*/
+									display: -webkit-box;
+									/*重点，不能用block等其他*/
+									-webkit-line-clamp: 2;
+									/*重点IE和火狐不支持*/
+									-webkit-box-orient: vertical;
+									/*重点*/
 								}
-								.price{
+
+								.price {
 									font-family: Akrobat-Regular;
-									font-size:40rpx;
+									font-size: 40rpx;
 									line-height: 48rpx;
-									.symbol{
+									color: rgba(0, 0, 0, 1);
+									display: flex;
+									align-items: flex-end;
+									.symbol {
 										font-size: 24rpx;
 										line-height: 34rpx;
 									}
-									.earn{
+								
+									.earn {
 										font-family: SourceHanSansCN-Regular;
 										font-size: 24rpx;
-										color:rgba(255,129,96,1);
-										line-height:36rpx;
+										color: rgba(255, 129, 96, 1);
+										line-height: 36rpx;
 										margin-left: 6rpx;
-										text{
+								
+										.earn_icon {
+											font-family: Akrobat-Regular;
+											font-size: 22rpx;
+											line-height: 36rpx;
+											margin-right: 4rpx;
+											margin-top: -2px;
+											text{
+												
+											}
+										}
+								
+										text {
 											margin-left: 4rpx;
 											font-family: Akrobat-Regular;
-											font-size:38rpx;
-											line-height:48rpx;
+											font-size: 40rpx;
+											line-height: 40rpx;
 										}
 									}
 								}
-								image{
+
+								image {
 									width: 32rpx;
 									height: 32rpx;
 									position: absolute;

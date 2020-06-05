@@ -247,7 +247,7 @@
 				position: absolute;
 				width: 30px;
 				height: 2px;
-				background: $uni-color-error;
+				background: #FE7956;
 				left: 16px;
 				bottom: 0;
 				transition: left 0.5s ease;

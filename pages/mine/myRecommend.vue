@@ -1,4 +1,5 @@
 <template>
+	<!-- 我的推荐 -->
 	<view class="content">
 		<view class="timi_list">
 			<view class="timi" v-for="(item,index) in timiList" :key="index">
@@ -104,7 +105,7 @@
 			.timi_title {
 				display: flex;
 				justify-content: space-between;
-				align-items: center;
+				align-items: flex-end;
 				margin-bottom: 20rpx;
 				.name {
 					font-size: 28rpx;
@@ -138,14 +139,13 @@
 					}
 			
 					.guige {
-						height: 33rpx;
-						padding: 4rpx 8rpx;
-						border-radius: 6rpx;
-						background-color: #D8D8D8;
-						font-size: 20rpx;
-						line-height: 33rpx;
-						text-align: center;
+						font-size: 24rpx;
+						line-height: 28rpx;
+						padding: 2rpx 12rpx;
+						padding-top: 6rpx;
 						color: #999999;
+						background: rgba(247, 243, 241, 1);
+						border-radius: 6rpx;
 					}
 				}
 			
@@ -166,7 +166,7 @@
 					}
 			
 					.shuliang {
-						font-size: 26rpx;
+						font-size: 30rpx;
 						line-height: 26rpx;
 						color: #969696;
 					}
@@ -184,7 +184,7 @@
 			
 				.nur {
 					font-family: Akrobat-Regular;
-					font-size: 28rpx;
+					font-size: 32rpx;
 				}
 			}
 			.timi_item{

@@ -145,7 +145,7 @@
 <style lang="less" scoped>
 	.fxied{
 		position: fixed;
-		top: 90rpx;
+		top: 82rpx;
 		z-index: 2;
 		background-color: #FFFFFF;
 	}

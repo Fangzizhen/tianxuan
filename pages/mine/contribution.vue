@@ -1,4 +1,5 @@
 <template>
+	<!-- 贡献值 -->
 	<view class="content">
 		<view class="balance_title">
 			<view class="balance_key">贡献值(元)</view>

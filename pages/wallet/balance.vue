@@ -24,7 +24,7 @@
 						<text class="reward_key">添米粉</text><text class="reward_val">蒋劲夫</text>
 					</view>
 					<view class="reward_txt">
-						<text class="reward_key">奖励金额</text><text class="reward_val num">¥10</text>
+						<text class="reward_key" >奖励金额</text><text class="reward_val num" style="font-size: 28rpx;">¥10</text>
 					</view>
 					<view class="reward_txt">
 						<text class="reward_key">添小米</text><text class="reward_val">彭于晏</text>
@@ -33,7 +33,7 @@
 						<text class="reward_key">添米粉</text><text class="reward_val">吴彦祖</text>
 					</view>
 					<view class="reward_txt">
-						<text class="reward_key">到账时间</text><text class="reward_val num">2020-05-01  12:12:12</text>
+						<text class="reward_key">到账时间</text><text class="reward_val num" style="font-size: 28rpx;">2020-05-01  12:12:12</text>
 					</view>
 				</view>
 			</view>
@@ -45,7 +45,7 @@
 						<text class="reward_key">添米粉</text><text class="reward_val">蒋劲夫</text>
 					</view>
 					<view class="reward_txt">
-						<text class="reward_key">奖励金额</text><text class="reward_val num">¥10</text>
+						<text class="reward_key">奖励金额</text><text class="reward_val num" style="font-size: 28rpx;">¥10</text>
 					</view>
 					<view class="reward_txt">
 						<text class="reward_key">添小米</text><text class="reward_val">彭于晏</text>
@@ -54,7 +54,7 @@
 						<text class="reward_key">添米粉</text><text class="reward_val">吴彦祖</text>
 					</view>
 					<view class="reward_txt">
-						<text class="reward_key">到账时间</text><text class="reward_val num">2020-05-01  12:12:12</text>
+						<text class="reward_key">到账时间</text><text class="reward_val num" style="font-size: 28rpx;">2020-05-01  12:12:12</text>
 					</view>
 				</view>
 			</view>
@@ -137,7 +137,7 @@
 						margin-bottom: 10rpx;
 					}
 					.balance_num{
-						font-size: 30rpx;
+						font-size: 34rpx;
 						line-height: 38rpx;
 						color: #FE7956;
 						text-align: center;

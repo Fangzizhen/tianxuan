@@ -1,11 +1,9 @@
-// const commonUrl = "https://api.ttianxuan.com/"; //公共路径 /
+// const commonUrl = "https://api.ttianxuan.com/"; //公共路径 
 const commonUrl = "/api/"; //请求代理
 
 // post请求封装
 function postRequest(url, data) {
-	uni.showLoading({
-	    title: '加载中...'
-	});
+	
 	var promise = new Promise((resolve, reject) => {
 		var that = this;
 		if(data == "" || data == undefined || data == null){
@@ -14,9 +12,14 @@ function postRequest(url, data) {
 		}else{
 			var postData = JSON.stringify(data);   
 		}
-		// var postData = data;
 		var plugins_params = ''
 		var token = ''
+		var token_storage = uni.getStorageSync('request_user_token')
+		if(token_storage == "" || token_storage == null || token_storage == undefined ){
+			token = ''
+		}else{
+			token = token_storage
+		}
 		uni.request({
 			url: commonUrl + "index.php?s=/api/" + url + plugins_params + "&application=app&application_client_type=weixin" +
 				"&token=" +
@@ -28,10 +31,14 @@ function postRequest(url, data) {
 				"content-type": "application/json; charset=utf-8",
 			},
 			success: function(res) {
+					uni.showLoading({
+					    title: '加载中...'
+					});
 				//返回什么就相应的做调整
-				uni.hideLoading();
+				
 				if (res.statusCode == 200) {
 					resolve(res.data);
+					uni.hideLoading();
 				} else {
 					// 请求服务器成功，但是由于服务器没有数据返回，此时无code。会导致这个空数据
 					//接口后面的then执行

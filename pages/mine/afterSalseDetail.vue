@@ -41,7 +41,7 @@
 			return {
 				// ----------------
 				fileList: [],
-				url: '/api/index.php?s=/api/ueditor/index&application=app&application_client_type=weixin&token=""&ajax=ajax',
+				url: '/api/index.php?s=/api/ueditor/index&application=app&application_client_type=weixin&token="4d843324f33c03f045b8257dd30eba1b"&ajax=ajax',
 				name: 'file',
 				// -------------
 				infoData: {},
@@ -74,6 +74,7 @@
 			// -----------------------------
 			// 上传成功
 			onSuccess(res) {
+				console.log(res)
 			  // 响应示例
 			  // {
 			  //    code: 0,

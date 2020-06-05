@@ -1,55 +1,63 @@
 <template>
 	<view class="content ">
-		<view class="list " v-for="(item, index) in addressList" :key="index" @click="checkAddress(item)">
-			<view class="wrapper">
-				<view v-if="item.default" class="default ico">默</view>
-				<view v-else class="unDefault  ico">方</view>
-				<view class="data-box">
-					<view class="u-box">
-						<text class="name">{{item.name}}</text>
-						<text class="mobile">{{item.mobile}}</text>
+
+		<uni-swipe-action>
+			<uni-swipe-action-item class="list_box" :options="options" v-if="addressList.length > 0" v-for="(item, index) in addressList"
+			 :key="index" @click="addressDel(item.id)">
+				<view class="list " @click="checkAddress(item)">
+					<view class="wrapper">
+						<view v-if="item.is_default != '0'" class="default ico">默</view>
+						<view v-else class="unDefault  ico">{{item.title_name}}</view>
+						<view class="data-box">
+							<view class="u-box">
+								<text class="name">{{item.name}}</text>
+								<text class="mobile">{{item.tel}}</text>
+							</view>
+							<view class="address-box">
+								<text v-if="item.is_default != '0'" class="tag">默认</text>
+								<text class="addAble" v-if="item.tag != ''">{{item.tag}}</text>
+								<text class="address">{{item.province_name}} {{item.city_name}}{{item.county_name}}{{item.address}}</text>
+							</view>
+						</view>
 					</view>
-					<view class="address-box">
-						<text v-if="item.default" class="tag">默认</text>
-						<text class="addAble">家</text>
-						<text class="address">{{item.addressName}} {{item.area}}</text>
-					</view>
+					<text class="yticon " @click.stop="addAddress('edit', item)">编辑</text>
 				</view>
-			</view>
-			<text class="yticon " @click.stop="addAddress('edit', item)">编辑</text>
-		</view>
+			</uni-swipe-action-item>
+		</uni-swipe-action>
+
+
+		<!-- <view v-else class="list">
+			暂无数据
+		</view> -->
 
 		<view class="add-btn" @click="addAddress('add')">新增地址</view>
 	</view>
 </template>
 
 <script>
+	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
+	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
 	import request from '../../common/request.js'
 	export default {
 		data() {
 			return {
+				options: [{
+					text: '删除',
+					style: {
+						backgroundColor: '#FE7956'
+					}
+				}],
 				source: 0,
-				addressList: [{
-					name: '刘晓晓',
-					mobile: '18666666666',
-					addressName: '北京 北京市 朝阳区 光华街道 世纪财富中心A座1808',
-					address: '北京市东城区',
-					area: 'B区',
-					default: true
-				}, {
-					name: '刘大大',
-					mobile: '18667766666',
-					addressName: '北京 北京市 朝阳区 光华街道 世纪财富中心A座1808',
-					address: '山东省济南市历城区',
-					area: '西单元302',
-					default: false,
-				}]
+				addressList: [], //地址数据
 			}
+		},
+		onShow() {
+			this.getList() //获取数据
 		},
 		onLoad(option) {
 			console.log(option.source);
 			this.source = option.source;
-			// this.getList() //获取数据
+
 			// uni.setNavigationBarColor({
 			// 	frontColor: '#000000',
 			// 	backgroundColor: '#F7F3F1',
@@ -60,23 +68,64 @@
 			// })
 		},
 		methods: {
+
 			// 获取列表数据
 			getList() {
+				this.checkLogin('navigate')
 				var data = {};
 				request.post('useraddress/index', data).then(res => {
 					console.log(res)
-					// this.catrgory = res.data.data
-					// 	this.makeup = false
+
+					var resData = res.data
+					if(resData.length == 0){
+						uni.setStorageSync("buy_user_address_select", [])
+					}else{
+						for (let i = 0; i < resData.length; i++) {
+							resData[i].title_name = resData[i].name.substr(0, 1);
+							if(resData[i].is_default==true){
+								uni.setStorageSync("buy_user_address_select", resData[i])
+							}
+						}
+					}
+					this.addressList = resData;
+					console.log(resData)
 				})
 			},
 			//选择地址
 			checkAddress(item) {
 				console.log(item)
-				if (this.source == 1) {
-					//this.$api.prePage()获取上一页实例，在App.vue定义
-					this.$api.prePage().addressData = item;
-					uni.navigateBack()
-				}
+				uni.setStorageSync("buy_user_address_select", item)
+				uni.navigateBack()
+			},
+			// 删除地址
+			addressDel(id) {
+				var that = this
+				uni.showModal({
+					title: '提示',
+					content: '确定删除该条地址么？',
+					success: function(res) {
+						if (res.confirm) {
+							request.post('useraddress/delete', {id:id}).then(res => {
+								console.log(res)
+								if(res.code == 0){
+									uni.showToast({
+										mask:true,
+										title: res.msg,
+										duration: 2000,
+									});
+									that.getList()
+								}else{
+									uni.showToast({
+										mask:true,
+										title: res.msg,
+										duration: 2000,
+									});
+								}
+								
+							})
+						}
+					}
+				});
 			},
 			addAddress(type, item) {
 				uni.navigateTo({
@@ -94,10 +143,12 @@
 </script>
 
 <style scoped lang="less">
-
-
 	.content {
 		position: relative;
+	}
+
+	.list_box {
+		border-bottom: 0.3px #DBDBDB solid !important;
 	}
 
 	.list {
@@ -107,12 +158,9 @@
 		padding: 34rpx 38rpx 24rpx 16rpx;
 		background: #fff;
 		position: relative;
-		border-bottom: 1rpx #DBDBDB solid;
+		flex: 1;
 	}
 
-	.list:last-child {
-		border-bottom: 1rpx #FFFFFF solid;
-	}
 
 	.wrapper {
 		display: flex;
@@ -136,14 +184,17 @@
 		}
 
 		.ico {
-			width: 60rpx;
-			height: 60rpx;
-			border-radius: 50%;
-			font-size: 36rpx;
-			line-height: 60rpx;
-			color: #fff;
-			text-align: center;
-			margin-right: 22rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 60rpx;
+		height: 60rpx;
+		border-radius: 50%;
+		font-size: 36rpx;
+		line-height: 36rpx;
+		color: #fff;
+		text-align: center;
+		margin-right: 20rpx;
 		}
 
 		.default {
@@ -154,25 +205,29 @@
 			background-color: #F5EFEF;
 		}
 	}
-	.yticon{
+
+	.yticon {
 		font-size: 24rpx;
 		line-height: 34rpx;
 		color: #AEAEAE;
 	}
+
 	.address-box {
 		.tag {
 			width: 70rpx;
 			height: 34rpx;
 			border-radius: 6rpx;
 			font-size: 24rpx;
-			line-height: 34rpx;
 			margin-right: 10rpx;
 			background: #FEEAE5;
 			text-align: center;
+			// vertical-align: middle;
 			color: #FE7956;
 			padding: 4rpx 10rpx;
+			padding-top: 8rpx;
+			
 		}
-
+		
 		.addAble {
 			height: 34rpx;
 			border-radius: 6rpx;
@@ -180,6 +235,7 @@
 			line-height: 34rpx;
 			margin-right: 10rpx;
 			padding: 4rpx 10rpx;
+			padding-top: 8rpx;
 			background-color: #F4F4F4;
 			color: #333333;
 		}
@@ -187,6 +243,7 @@
 		.address {
 			font-size: 24rpx;
 			line-height: 42rpx;
+			color: #333333;
 		}
 	}
 

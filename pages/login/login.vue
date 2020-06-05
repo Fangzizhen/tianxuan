@@ -9,9 +9,7 @@
 
 		</view>
 		<view class="tips">若未创建过添选账号，则自动创建账号</view>
-		<view class="btn">提交</view>
-		<!-- <button type="default" open-type="getUserInfo">登录</button> -->
-		{{loginRes}}
+		<view class="btn" @click="loginSubmit">提交</view>
 	</view>
 </template>
 
@@ -28,91 +26,89 @@
 			return {
 				phone: "",
 				code: "",
-				loginRes: ""
+				weixinData: [],
 			}
 		},
-		onReady() {
-			// 判断是否是微信浏览器打开
-			var isWeixin = this.$api.isWeiXin()
-			// if(isWeixin){
-			// var data = {authcode: '023KUJhW1mQ6G01M7klW1g60iW1KUJh6'};
-			// request.post('user/wechatuserauth', data).then(res => {
-			// 	console.log(res.data)
-			// 	// this.chooseGoods(res.data[0].id)
-			// })
-			// }
-		},
-		
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
-		console.log(option)
-			// this.getDetail(option.code)
-			this.getCode(option.code)
-			this.code = option.code;
+			console.log(this.get_user_type())
+			this.weixinData = this.get_user_type()
 		},
 		methods: {
 			/* 手机号内容 */
 			getInputValue(e) {
 				this.phone = e.value
 				// console.log(e)
-			
+
 			},
 			getInputCode(e) {
-				console.log(e)
+				this.code = e.value
 			},
 
 
-
-			getCode(code) { // 非静默授权，第一次有弹框
-				let appid = 'wx36a4ad82bc2c8ec3';
-				// const code = this.getUrlParam('code') // 截取路径中的code，如果没有就去微信授权，如果已经获取到了就直接传code给后台获取openId
-				let local = getCurrentPages()
-				let curRoute = "https://m.ttianxuan.com/"+local[local.length - 1].route
-				console.log(encodeURIComponent(curRoute))
-				if (code == null || code === '') {
-				let appid = 'wx36a4ad82bc2c8ec3';
-				let uri = encodeURIComponent(window.location.href); // 这里务必编码
-				let scope = 'snsapi_userinfo'; // 获取用户信息
-				// let scope = 'snsapi_base'; // 静默授权，仅可获取openid
-				window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${uri}&response_type=code&scope=${scope}&state=123#wechat_redirect`;
-				} else {
-					this.getUserInfo(code) //把code传给后台获取用户信息
+			// 提交登录
+			loginSubmit() {
+				if (this.phone == '' || this.phone == null || this.phone == undefined) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入手机号',
+						duration: 2000
+					});
+					return;
 				}
-			},
-			getUserInfo(code) { // 通过code获取 openId等用户信息，/api/user/wechat/login 为后台接口
-				var data  = {
-					authcode :code
+				if (!/(^1[3|4|5|7|8][0-9]{9}$)/.test(this.phone)) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入正确的手机号码',
+						duration: 2000
+					});
+					return;
 				}
-				request.post('user/WechatPublicAccessToken', data).then(res => {
+				if (this.code == '' || this.code == null || this.code == undefined) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入验证码',
+						duration: 2000
+					});
+					return;
+				}
+				var data = {
+					mobile: this.phone,
+					verify: this.code,
+					app_type: 'weixin_web',
+					nickname: this.weixinData.nickname,
+					avatar: this.weixinData.headimgurl,
+					province: this.weixinData.province,
+					city: this.weixinData.city,
+					gender: this.weixinData.sex,
+					referrer: this.weixinData.referrer,
+					weixin_web_openid: this.weixinData.weixin_web_openid,
+				}
+				console.log(data)
+				request.post('user/reg', data).then(res => {
 					console.log(res)
-					// this.chooseGoods(res.data[0].id)
+					if (res.code != 0) {
+						uni.showToast({
+							title: res.msg,
+							duration: 2000,
+							icon: none
+						});
+					} else {
+					uni.showToast({
+						title: res.msg,
+						duration: 2000,
+						success() {
+							uni.setStorageSync("userinfor",res.data)
+							uni.setStorageSync("request_user_token",res.data.token)
+							uni.switchTab({
+								url: '/pages/index/index'
+							});
+						}
+					});
+						
+					}
 				})
-			}
+			},
 
-
-
-
-
-
-
-			// getUserinfor() {
-
-			// 	let appid = 'wx36a4ad82bc2c8ec3';
-			// 	let code = this.getUrlParam('code')
-			// 	this.code = code;
-			// 	let redirect_uri = window.location.href // 授权登录成功回调的地址，一般为当前页
-			// 	// 授权操作是直接访问腾讯开放平台的一个授权地址，授权成功后会回调
-			// 	if (code == null || code == "") {
-			// 		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' +
-			// 			encodeURIComponent(local) + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect' //引导用户授权
-			// 	}
-
-			// },
-			// getUrlParam(name) {
-			// 	var reg = new RegExp('(^|&)' + name + '=([^&]*) (&|$)')
-			// 	var r = window.location.search.substr(1).match(reg);
-			// 	if (r != null) return unescape(r[2])
-			// 	return null
-			// }
 		},
 	}
 </script>

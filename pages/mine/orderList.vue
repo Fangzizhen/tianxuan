@@ -1,40 +1,45 @@
 <template>
+	<!-- 订单列表 -->
 	<view class="page">
 		<tabControl :current="current" activeColor="#FF9377" :values="items" :fixed="true" :scrollFlag='true' :isEqually='true'
 		 @clickItem="onClickItem"></tabControl>
-		<!-- 使用 swiper 配合 滑动切换 -->
-		<swiper class="swiper" style="height: 100%;" @change='scollSwiper' :current='current'>
-			<swiper-item v-for="(item,index) in items" :key='index'>
-				<!-- 使用 scroll-view 来滚动内容区域 -->
-				<scroll-view scroll-y="true" style="height: 100%;" scroll-with-animation="true">
-					<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
-					<view class="order" v-for="(item,index) in ordrtAll" :key="index">
+		<view class="swiper ">
+			<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
+				<view class="order" v-for="(item,index) in recommendList" :key="index" @click="navDetail(item.id)">
+					
+
+					<view v-for="(commodity,index) in item.items" :key="index">
 						<view class="title">
-							<text class="pinlei">{{item.pinlei}}</text>
-							<text class="zhuangtai">{{item.zhuangtai}}</text>
+							<text class="pinlei">{{commodity.category}}</text>
+							<text class="zhuangtai">{{item.status_name}}</text>
 						</view>
 						<view class="content">
-							<image class="img" :src="item.img"></image>
+							<image class="img" :src="commodity.images"></image>
 							<view class="category">
-								<view class="name">{{item.name}}</view>
-								<text class="guige">{{item.guige}}</text>
+								<view class="name" style="text-indent: -10rpx;">{{commodity.title}}</view>
+								<text class="guige" v-if="commodity.spec_text !=null ">{{commodity.spec_text}}</text>
 							</view>
 							<view class="number">
-								<view class="danjia"><text class="symbol">￥</text>{{item.danjia}}</view>
-								<view class="shuliang">x{{item.shuliang}}</view>
+								<view class="danjia"><text class="symbol">￥</text>{{commodity.price}}</view>
+								<view class="shuliang">x{{commodity.buy_number}}</view>
+								<view class="receipt" v-show="item.status_name != '待付款' && item.status_name != '待收货'"  @click.stop="Aftermarke(item)">申请退款</view>
 							</view>
 						</view>
-						<view class="statistics">总价<text class="symbol">￥</text><text class="nur">{{item.zongjia}}</text>，优惠<text class="symbol">￥</text><text
-							 class="nur">{{item.youhui}}</text>，实付款<text class="symbol">￥</text><text class="nur">{{item.shiji}}</text></view>
-							 <view class="btn_box">
-							 	<view class="receipt">确认收货</view>
-							 	<view class="logistics"  @click="goLogistics(item.goods_id)">查看物流</view>
-							 </view>
+						
+						<!-- <view class="statistics">总价<text class="symbol">￥</text><text class="nur">{{commodity.total_price}}</text>
+							<view v-if="user_type != undefined && user_type != 0">，优惠<text class="symbol">￥</text><text class="nur">{{item.youhui}}</text>，实付款<text class="symbol">￥</text><text class="nur">{{item.shiji}}</text></view>
+						</view> -->
+						
 					</view>
-					</mescroll-body>
-				</scroll-view>
-			</swiper-item>
-		</swiper>
+					<view class="statistics">{{item.describe}}</view>
+					<view class="btn_box" >
+						
+						<!-- <view class="receipt" @click.stop="collect_event(item)">确认收货</view> -->
+						<view v-show="item.status_name != '待付款' && item.status_name != '待发货'" class="logistics" @click.stop="goLogistics(item.id)">查看包裹</view>
+					</view>
+				</view>
+			</mescroll-body>
+		</view>
 	</view>
 </template>
 <script>
@@ -50,55 +55,126 @@
 			return {
 				items: ['全部', '待付款', '待发货', '待收货'],
 				current: "",
-				page:1,//分页数
-				ordrtAll: [{
-					goods_id:1,
-					pinlei: "时令鲜果",
-					zhuangtai: "卖家已发货",
-					name: "四川眉山9号橙一个长长的名字的展示形式",
-					danjia: "45",
-					shuliang: "2",
-					guige: "#5g 1支装",
-					zongjia: 90,
-					youhui: "0",
-					shiji: 90,
-					img: "../../static/images/touxiang.jpg"
-				}]
+				currentNum: '',
+				page: 1, //分页数
+				recommendList: [],
+				user_type: this.get_user_type().plugins_distribution_level, //用户类型
 			};
 		},
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
-		console.log(option)
-		this.current = option.current_data
+			this.current = parseInt(option.current_data)
+			if (this.current == 0) {
+				this.currentNum = -1;
+			} else {
+				this.currentNum = this.current;
+			}
 		},
 		methods: {
+			// 改变分类
 			onClickItem(val) {
+				console.log(val)
+				this.recommendList = []
 				this.current = val.currentIndex
+				if (val.currentIndex == 0) {
+					this.currentNum = -1;
+				} else {
+					this.currentNum = val.currentIndex;
+				}
+				var page = {
+					num: this.page
+				}
+				this.upCallback(page)
 			},
 			scollSwiper(e) {
 				this.current = e.target.current
 			},
-			goLogistics(id){
+			goLogistics(id) {
 				uni.navigateTo({
-					url: '/pages/mine/logistics?goods_id='+ id
+					url: '/pages/mine/logistics?id=' + id
+				})
+			},
+			navDetail(id) {
+				uni.navigateTo({
+					url: '/pages/mine/orderDetail?id=' + id
 				})
 			},
 			// 上拉加载和下拉刷新
 			upCallback(page) {
-				console.log(page)
 				var data = {
-					category_id: 1,
-					page: page.num
-				};
-				request.post('search/index', data).then(res => {
-					// var curPageData = res.data.data
-					// this.mescroll.endByPage(curPageData.length, res.data.page_total);
-					if (page.num == 1) this.catrgory = [];
-					// this.catrgory = this.catrgory.concat(curPageData);
+					page: page.num,
+					keywords: "",
+					status: this.currentNum,
+					is_more: 1
+				}
+				request.post('order/index', data).then(res => {
+					console.log(res)
+					var curPageData = res.data.data
+					this.mescroll.endByPage(curPageData.length, res.data.page_total);
+					if (page.num == 1) this.recommendList = [];
+					this.recommendList = this.recommendList.concat(curPageData);
 				}).catch(() => {
 					//联网失败, 结束加载
 					this.mescroll.endErr();
 				})
 			},
+			 // 收货
+			  collect_event(e) {
+					var that = this;
+			    uni.showModal({
+			      title: "温馨提示",
+			      content: "请确认已收到货物或已完成，操作后不可恢复，确定继续吗?",
+			      confirmText: "确认",
+			      cancelText: "不了",
+			      success: result => {
+			        if (result.confirm) {
+			//           // 参数
+			          var id = e.id;
+			          // var status = e.status;
+			
+			//           // 加载loding
+			//           wx.showLoading({title: "处理中..." });
+			
+			
+			
+								request.post('order/collect', {id:id}).then(res => {
+									if(res.code == 0){
+										uni.showToast({
+											icon:"none",
+										    title: res.msg,
+												duration: 2000,
+												success() {
+													var page = {
+														num:1
+													}
+													that.upCallback(page)
+													
+												}
+										});
+									}
+								})
+			        }
+			      }
+			    });
+			  },
+				
+				
+				
+				// 去到售后详情
+				Aftermarke(e) {
+					console.log(e)
+					var that = this;
+					var parameter = {
+						oid :e.id,
+					}
+					uni.navigateTo({
+						url: 'afterSalseDetail?info='+encodeURIComponent(JSON.stringify(parameter))
+					})
+				},
+				
+				
+				
+				
+				
 		}
 	};
 </script>
@@ -121,6 +197,7 @@
 		.order {
 			background-color: #fff;
 			padding: 38rpx 24rpx 44rpx 32rpx;
+			margin-bottom: 10rpx;
 
 			.title {
 				display: flex;
@@ -143,6 +220,7 @@
 			.content {
 				display: flex;
 				justify-content: space-between;
+				margin-bottom: 20rpx;
 
 				.img {
 					width: 180rpx;
@@ -159,14 +237,13 @@
 					}
 
 					.guige {
-						height: 33rpx;
-						padding: 4rpx 8rpx;
-						border-radius: 6rpx;
-						background-color: #D8D8D8;
-						font-size: 20rpx;
-						line-height: 33rpx;
-						text-align: center;
+						font-size: 24rpx;
+						line-height: 28rpx;
+						padding: 2rpx 12rpx;
+						padding-top: 6rpx;
 						color: #999999;
+						background: rgba(247, 243, 241, 1);
+						border-radius: 6rpx;
 					}
 				}
 
@@ -177,42 +254,55 @@
 					font-family: Akrobat-Regular;
 
 					.danjia {
-						font-size: 28rpx;
+						font-size: 32rpx;
 						line-height: 34rpx;
 						margin-bottom: 8rpx;
 
 						.symbol {
-							font-size: 24rpx;
+							font-size: 28rpx;
 						}
 					}
 
 					.shuliang {
-						font-size: 22rpx;
+						margin-top: 6rpx;
+						font-size: 26rpx;
 						line-height: 26rpx;
 						color: #969696;
 					}
+					.receipt{
+						font-size: 26rpx;
+						margin-top: 30rpx;
+						color: #4d7fa7;
+					}
 				}
 			}
-			.statistics{
+
+			.statistics {
 				text-align: right;
 				font-size: 28rpx;
 				margin-bottom: 24rpx;
-				.symbol{
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				.symbol {
 					font-family: Akrobat-Regular;
 					font-size: 22rpx;
 				}
-				.nur{
+
+				.nur {
 					font-family: Akrobat-Regular;
 					font-size: 28rpx;
 				}
 			}
-			.btn_box{
+
+			.btn_box {
 				display: flex;
 				flex-direction: row-reverse;
 				text-align: center;
 				font-size: 26rpx;
 				line-height: 50rpx;
-				.receipt{
+
+				.receipt {
 					width: 170rpx;
 					height: 50rpx;
 					color: #FF9377;
@@ -220,7 +310,8 @@
 					border-radius: 6rpx;
 					margin-left: 30rpx;
 				}
-				.logistics{
+
+				.logistics {
 					width: 170rpx;
 					height: 50rpx;
 					border: 1rpx #979797 solid;

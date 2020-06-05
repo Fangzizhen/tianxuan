@@ -4,10 +4,10 @@
 			<input class="input" type="text" v-model="addressData.name" placeholder="收货人" placeholder-class="placeholder" />
 		</view>
 		<view class="row">
-			<input class="input aka" type="number" v-model="addressData.mobile" placeholder="手机号" placeholder-class="placeholder" />
+			<input class="input aka" type="number" v-model="addressData.tel" placeholder="手机号" placeholder-class="placeholder" />
 			<view class="phone-right">
-				<text class="aka">+86</text>
-				<uni-icons type="arrowright" size="14" color="#B3B3B3"></uni-icons>
+				<text class="aka" style="font-size: 32rpx;">+86</text>
+				<uni-icons type="arrowright" size="15" color="#B3B3B3"></uni-icons>
 			</view>
 		</view>
 		<!-- 收货地址 -->
@@ -25,13 +25,13 @@
 		<selectAddress ref='selectAddress' @selectAddress="successSelectAddress"></selectAddress>
 		<!-- 门牌号 -->
 		<view class="area-box">
-			<textarea class="area" value="" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元室等" placeholder-class="placeholder" />
+			<textarea class="area" v-model="addressData.address" placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元室等" placeholder-class="placeholder" />
 			</view>
 			<view class="addressType-box siyuan">
 				<text class="title">地址标签</text>
 				<view class="addressType-list">
-						<view class="addressType"  v-for="(item,index) in addressTypeList" :key="item.id" @click="changeType(item.id)">
-							<text class="unlabel" :class="addressType == item.id? 'label': ''"></text>
+						<view class="addressType"  v-for="(item,index) in addressTypeList" :key="item.id" @click="changeType(item.name)">
+							<text class="unlabel" :class="addressType == item.name? 'label': ''"></text>
 							<text>{{item.name}}</text>
 						</view>
 				</view>
@@ -40,11 +40,6 @@
 				<view class="default" :class="addressData.default?'undefault':''"><uni-icons v-if="addressData.default" class="defaulticon" color="#FE7956" type="checkmarkempty" size="12"></uni-icons></view>
 				<text>设为默认地址</text>
 			</view>
-			
-		<!-- <view class="row default-row">
-			<text class="tit">设为默认</text>
-			<switch :checked="addressData.defaule" color="#fa436a" @change="switchChange" />
-		</view> -->
 		<view class="add-btn" @click="confirm">保存</view>
 	</view>
 </template>
@@ -58,16 +53,16 @@
 		},
 		data() {
 			return {
+				addressId : "",
 				city:"",
 				addressData: { //提交数据
 					name: '',
-					mobile: '',
-					addressName: '在地图选择',
+					tel: '',
 					address: '',
 					area: '',
 					default: false
 				},
-				addressType:1,
+				addressType:'家',
 				addressTypeList:[
 					{
 						id:1,
@@ -89,9 +84,28 @@
 			let title = '新增收货地址';
 			if (option.type === 'edit') {
 				title = '编辑收货地址'
-				this.addressData = JSON.parse(option.data)
+				// this.addressData = JSON.parse(option.data)
+				var openJsonData = JSON.parse(option.data)
+				console.log(JSON.parse(option.data))
+				var openData = {
+					name:openJsonData.name,
+					tel:openJsonData.tel,
+					city:{
+						cityId:openJsonData.city,
+						city:openJsonData.city_name,
+						countyId:openJsonData.county,
+						county:openJsonData.county_name,
+						province:openJsonData.province_name,
+						provinceId:openJsonData.province,
+					},
+					address:openJsonData.address,
+					tag:openJsonData.tag,
+					default:openJsonData.is_default
+				}
+				this.addressData = openData
+				this.city = openData.city
+				this.addressId = openJsonData.id
 			}
-			this.manageType = option.type;
 			uni.setNavigationBarTitle({
 				title
 			})
@@ -111,40 +125,66 @@
 			},
 			// 接受地址回调获得数据
 			successSelectAddress(address) { 
-				console.log(address)
-				this.city=address;
+				
+				this.city= address;
+				this.addressData.city= address;
+				console.log(this.city)
+				
 			},
 			// 设置默认开关
 			switchChange() {
 				this.addressData.default = !this.addressData.default;
 			},
 			// 地址标签
-			changeType(id){
-				this.addressType = id;
+			changeType(tag){
+				this.addressType = tag;
 			},
 			// 保存地址
 			confirm(){
-				// let data = this.addressData;
-				// if(!data.name){
-				// 	this.$api.msg('请填写收货人姓名');
-				// 	return;
-				// }
-				// if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)){
-				// 	this.$api.msg('请输入正确的手机号码');
-				// 	return;
-				// }
+				let data = this.addressData;
+				if(!data.name){
+					this.$api.msg('请填写收货人姓名');
+					return;
+				}
+				if(!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.tel)){
+					this.$api.msg('请输入正确的手机号码');
+					return;
+				}
 				
-				// if(!data.area){
-				// 	this.$api.msg('请填写门牌号信息');
-				// 	return;
-				// }
-				
-				// //this.$api.prePage()获取上一页实例，可直接调用上页所有数据和方法，在App.vue定义
-				// this.$api.prePage().refreshList(data, this.manageType);
-				// this.$api.msg(`地址${this.manageType=='edit' ? '修改': '添加'}成功`);
-				// setTimeout(()=>{
-				// 	uni.navigateBack()
-				// }, 800)
+				if(!data.address){
+					this.$api.msg('请填写门牌号信息');
+					return;
+				}
+				// console.log(data)
+				var postData = {
+					id:this.addressId,
+					name:data.name,
+					tel:data.tel,
+					address:data.address,
+					province: data.city.provinceId,
+					city: data.city.cityId,
+					county: data.city.countyId,
+					province_name: data.city.province,
+					city_name: data.city.city,
+					county_name: data.city.county,
+					is_default: data.default? '1':'0',
+					tag: this.addressType
+				}
+				console.log(postData)
+				request.post('useraddress/save', postData).then(res => {
+					console.log(res)
+					if(res.code == 0){
+						uni.showToast({
+							mask:true,
+							title: res.msg,
+							duration: 2000,
+						});
+						setTimeout(()=>{
+							uni.hideToast()
+							 uni.navigateBack({});
+						}, 2000)
+					}
+				})
 			},
 		}
 
@@ -175,7 +215,7 @@
 		padding: 30rpx 32rpx;
 		min-height: 48rpx;
 		background: #fff;
-		border-bottom: 1rpx #DBDBDB solid;
+		border-bottom: 0.3px #DBDBDB solid;
 
 		.phone-right {
 			text {
@@ -195,6 +235,7 @@
 			color: #969696;
 			flex: 1;
 			font-size: 28rpx;
+			margin-top: 2rpx;
 		}
 
 		.icon-shouhuodizhi {
@@ -224,7 +265,7 @@
 		background-color: #FFFFFF;
 		padding: 30rpx 32rpx;
 		padding-bottom: 0;
-		border-bottom: 1rpx #DBDBDB solid;
+		border-bottom: 0.3px #DBDBDB solid;
 		.title{
 			font-size:28rpx;
 			color:rgba(51,51,51,1);
@@ -247,6 +288,9 @@
 					margin-right: 12rpx;
 				}
 				.label{
+					border: none;
+					width: 28rpx;
+					height: 28rpx;
 					background:linear-gradient(45deg,rgba(255,240,214,1) 0%,rgba(255,177,177,1) 100%);
 				}
 			}
@@ -270,11 +314,16 @@
 			margin-right: 12rpx;
 			.defaulticon{
 				position: absolute;
-				top: -6rpx;
-				left: 2rpx;
+				top: 50%;
+				left: 50%;
+				margin-top: -20rpx;
+				margin-left: -12rpx;
 			}
 		}
 		.undefault{
+			width: 34rpx;
+			height: 34rpx;
+			border: none;
 			background-color: #FEEAE5;
 		}
 	}

@@ -137,7 +137,7 @@
 		width: 36px;
 		height: 31px;
 		text-align: center;
-		font-size: 26rpx;
+		font-size: 30rpx;
 		border-width: 1rpx;
 		border-style: solid;
 		border-color: #e5e5e5;

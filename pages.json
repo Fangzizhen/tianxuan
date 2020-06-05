@@ -2,7 +2,8 @@
 	"pages": [{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/list/list",
@@ -24,12 +25,13 @@
 		}, {
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "绑定手机号"
 			}
 		}, {
 			"path": "pages/mine/mine",
 			"style": {
-				"navigationBarTitleText": "个人中心"
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/mine/orderList",
@@ -52,14 +54,7 @@
 		{
 			"path": "pages/mine/logistics",
 			"style": {
-				"navigationBarTitleText": "查看物流",
-				"app-plus": {
-					"titleNView": {
-						"splitLine": {
-							"color": "#fff"
-						}
-					}
-				}
+				"navigationBarTitleText": "查看物流"
 			}
 		}, {
 			"path": "pages/mine/mineSetup",
@@ -72,9 +67,13 @@
 				"navigationBarTitleText": "商品详情"
 			}
 		}, {
+			"path": "pages/productList/ErProductList",
+			"style": {}
+		},
+		{
 			"path": "pages/productList/productList",
 			"style": {}
-		}, {
+		},{
 			"path": "pages/mine/collection",
 			"style": {
 				"navigationBarBackgroundColor": "#FFFFFF"
@@ -167,8 +166,26 @@
         ,{
             "path" : "pages/index/searchList",
             "style" : {
-							"navigationBarTitleText": "搜索结果"
+							
 						}
+        }
+        ,{
+            "path" : "pages/login/lod",
+            "style" : {
+							"navigationBarTitleText": "授权登录"
+						}
+        }
+        ,{
+            "path" : "pages/mine/orderDetail",
+            "style" : {
+							"navigationBarTitleText": "订单详情"
+						}
+        }
+        ,{
+            "path" : "pages/mine/logisticsDetail",
+            "style" : {
+            	"navigationBarTitleText": "物流详情"
+            }
         }
     ],
 	"globalStyle": {

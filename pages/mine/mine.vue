@@ -3,59 +3,91 @@
 		<!-- 个人信息 -->
 		<view class="title">
 			<view class="user_box">
-				<image class="user_picture" src="../../static/images/touxiang.jpg" mode=""></image>
-				<text>用户名</text>
+				<image class="user_picture" :src="mineData.avatar" mode=""></image>
+				<text>{{mineData.nickname}}</text>
 				<image class="setup" src="../../static/images/icon-shezhi.png" @tap="navSetup"></image>
 			</view>
 			<view class="collection_list">
 				<view class="collection" @click="navToCollection('shoucang')">
-					<text class="collection_number">269</text>
+					<text class="collection_number">{{mineData.user_goods_favor_count}}</text>
 					<text class="collection_name">收藏夹</text>
 				</view>
 				<view class="collection" @click="navToCollection('zuji')">
-					<text class="collection_number">269</text>
+					<text class="collection_number">{{mineData.user_goods_browse_count}}</text>
 					<text class="collection_name">足迹</text>
 				</view>
+				<!-- <view class="collection" @click="navToCollection('fenxiang')">
+					<text class="collection_number">{{mineData.user_order_count}}</text>
+					<text class="collection_name">我的分享</text>
+				</view> -->
 				<view class="collection" @click="navToCollection('fenxiang')">
-					<text class="collection_number">269</text>
+					<text class="collection_number">0</text>
 					<text class="collection_name">我的分享</text>
 				</view>
 			</view>
-			<view class="news" v-if="user_type == 1">
+			<view class="news" v-if="user_type == 0 && upgrade_data!=''"  >
 				<image src="../../static/images/icon-tongzhi.png" mode=""></image>
-				<text>邀请好友共同下满5单即可升级为小米(近30个自然日内)</text>
+				<text>邀请好友共同下满{{upgrade_data.still_need}}单即可升级为{{upgrade_data.fans}}(近30个自然日内)</text>
 			</view>
-			<view class="news" v-if="user_type == 2">
+			<view class="news" v-if="user_type == 1 && upgrade_data!=''">
 				<image src="../../static/images/icon-tongzhi.png" mode=""></image>
-				<text>您还仅剩60单即可升级为大米(近30个自然日内)</text>
+				<text>您还仅剩{{upgrade_data.still_need}}单即可升级为{{upgrade_data.fans}}(近30个自然日内)</text>
 			</view>
 		</view>
 		<!-- 余额列表 -->
-		<view class="balance_list"  v-if="user_type == 2">
-			<navigator class="balance" open-type="navigate" url="../wallet/balance">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
-				<text class="balance_name">余额</text>
+		<!-- <view class="balance_list"  v-if="user_type == 1">
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../wallet/balance">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">余额</view>
 			</navigator>
-			<navigator class="balance" open-type="navigate" url="../wallet/balance">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
-				<text class="balance_name">可提现余额</text>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../wallet/balance">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">可提现余额</view>
 			</navigator>
-			<navigator class="balance" open-type="navigate" url="../wallet/tianmibao">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
-				<text class="balance_name">添米宝</text>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../wallet/tianmibao">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">添米宝</view>
+			</navigator>
+		</view> -->
+		<view class="balance_list"  v-if="user_type == 1">
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">余额</view>
+			</navigator>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">可提现余额</view>
+			</navigator>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<view class="balance_name">添米宝</view>
 			</navigator>
 		</view>
-		<view class="balance_list"  v-if="user_type == 3">
-			<navigator class="balance" open-type="navigate" url="../wallet/balance">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
+		<!-- <view class="balance_list"  v-if="user_type == 2">
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../wallet/balance">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
 				<text class="balance_name">余额</text>
 			</navigator>
-			<navigator class="balance" open-type="navigate" url="../wallet/tianmibao">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../wallet/tianmibao">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
 				<text class="balance_name">添米宝</text>
 			</navigator>
-			<navigator class="balance" open-type="navigate" url="../mine/contribution">
-				<view class="balance_number"><text class="symbol">￥</text>269</view>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="../mine/contribution">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<text class="balance_name">贡献值</text>
+			</navigator>
+		</view> -->
+		<view class="balance_list"  v-if="user_type == 2">
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<text class="balance_name">余额</text>
+			</navigator>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
+				<text class="balance_name">添米宝</text>
+			</navigator>
+			<navigator hover-class="none" class="balance" open-type="navigate" url="">
+				<view class="balance_number"><text class="symbol">￥</text>0</view>
 				<text class="balance_name">贡献值</text>
 			</navigator>
 		</view>
@@ -70,7 +102,7 @@
 		<!-- 订单中心 -->
 		<view class="order_center">
 			<!-- 普通用户 -->
-			<view class="ordinary"  v-if="user_type == 1">
+			<view class="ordinary"  v-if="user_type == 0">
 				<view class="order_title">
 					<text class="name">我的订单</text>
 					<view class="operation"  @click="navOrder(0)">
@@ -110,11 +142,11 @@
 				</view>
 			</view>
 			<!-- 合伙人 -->
-			<view class="partner"  v-if="user_type == 2">
+			<view class="partner"  v-if="user_type == 1">
 				<view class="order_title"  @click="navOrder(0)">
 					<text class="name">订单中心</text>
 					<view class="operation">
-						<image src="../../static/images/icon-gengduo.png" mode=""></image>
+						<!-- <image src="../../static/images/icon-gengduo.png" mode=""></image> -->
 					</view>
 				</view>
 				<view class="ordinary_list">
@@ -125,7 +157,7 @@
 							<text>My order</text>
 						</view>
 					</view>
-					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
+					<navigator hover-class="none" class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
 						<image src="../../static/images/icon-wodetuijian.png"></image>
 						<view class="operation_txt">
 							<view>我的推荐</view>
@@ -135,11 +167,11 @@
 				</view>
 			</view>
 			<!-- 高级合伙人 -->
-			<view class="seniorPartner" v-if="user_type == 3">
+			<view class="seniorPartner" v-if="user_type == 2">
 				<view class="order_title" @click="navOrder(0)">
 					<text class="name">订单中心</text>
 					<view class="operation">
-						<image src="../../static/images/icon-gengduo.png" mode=""></image>
+						<!-- <image src="../../static/images/icon-gengduo.png" mode=""></image> -->
 					</view>
 				</view>
 				<view class="seniorPartner_list">
@@ -150,14 +182,21 @@
 							<text>My order</text>
 						</view>
 					</view>
-					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
+					<navigator hover-class="none" class="operation_btn" open-type="navigate" url="/pages/mine/myRecommend">
 						<image src="../../static/images/icon-wodetuijian.png"></image>
 						<view class="operation_txt">
 							<view>我的推荐</view>
 							<text>Myrecommend</text>
 						</view>
 					</navigator>
-					<navigator class="operation_btn" open-type="navigate" url="/pages/mine/myTimi">
+					<!-- <navigator hover-class="none" class="operation_btn" open-type="navigate" url="/pages/mine/myTimi">
+						<image src="../../static/images/icon-tianmi.png"></image>
+						<view class="operation_txt">
+							<view>我的添米</view>
+							<text>Mytianmi</text>
+						</view>
+					</navigator> -->
+					<navigator hover-class="none" class="operation_btn" open-type="navigate" url="">
 						<image src="../../static/images/icon-tianmi.png"></image>
 						<view class="operation_txt">
 							<view>我的添米</view>
@@ -167,19 +206,19 @@
 				</view>
 			</view>
 			<!-- 添米中心 -->
-			<view class="partner"  v-if="user_type == 3">
+			<view class="partner"  v-if="user_type == 2">
 				<view class="order_title">
 					<text class="name">添米中心</text>
 				</view>
 				<view class="ordinary_list">
-					<navigator class="operation_btn" open-type="navigate" url="myMillet">
+					<navigator hover-class="none" class="operation_btn" open-type="navigate" url="myMillet">
 						<image src="../../static/images/icon-xiaomi.png"></image>
 						<view class="operation_txt">
 							<view>我的添小米</view>
 							<text>Parter</text>
 						</view>
 					</navigator>
-					<navigator class="operation_btn" open-type="navigate" url="myRice">
+					<navigator hover-class="none" class="operation_btn" open-type="navigate" url="myRice">
 						<image src="../../static/images/icon-dami.png"></image>
 						<view class="operation_txt">
 							<view>我的添大米</view>
@@ -190,7 +229,7 @@
 			</view>
 		</view>
 		<!-- 售后 -->
-		<view class="service"  v-if="user_type !== 1" @click="afterSales">
+		<view class="service"  v-if="user_type != 0" @click="afterSales">
 			<text class="name">售后中心</text>
 				<image src="../../static/images/icon-gengduo.png" mode=""></image>
 		</view>
@@ -198,14 +237,15 @@
 		<view class="recommend_box">
 			<view v-for="(recommend,index) in recommendList" :key="index">
 				<view class="recommend" v-for="(recommendItem,index) in recommend.goods" :key="index" @tap="navToDetailPage(recommendItem.id)">
-					<image class="recommend_img" :src="recommendItem.images"></image>
+					<image class="recommend_img" :src="recommendItem.home_recommended_images"></image>
 					<view class="recommend_txt">
-						<text class="title">{{recommendItem.title}}</text>
-						<text class="price"><text class="symbol">￥</text>{{recommendItem.min_price}}<text class="earn">/赚<text>3.6</text></text></text>
+						<text class="title_name" style="text-indent: -10rpx;">{{recommendItem.title}}</text>
+			<text class="price"><text class="symbol">￥</text>{{recommendItem.min_price}}<text class="earn" v-if="user_type != undefined && user_type != 0"><text class="earn_icon">/</text>赚<text>{{recommendItem.profit}}</text></text></text>
 						<image src="../../static/images/index/icon-fenxiang.png" @tap.stop="share"></image>
 					</view>
 				</view>
 			</view>
+			<view class="noMore">-- 让选择变得简单 --</view>
 		</view>
 	</view>
 </template>
@@ -215,12 +255,31 @@
 	export default {
 		data() {
 			return {
+				userinfor:{},
 				recommendList:[],//推荐商品
-				user_type:3
+				user_type:"",
+				mineData:[],//个人中心数据
+				upgrade_data : {},//添米升级
 			}
 		},
-		created() {
+		onShow() {
+			var loginRes = this.checkLogin('/pages/index/index');
 			this.res();
+			this.getMineData();
+			var userinfor = uni.getStorageSync('userinfor');
+			this.userinfor = userinfor;
+			this.user_type = userinfor.plugins_distribution_level
+			var upgrade_data = uni.getStorageSync('upgrade_data');
+			this.upgrade_data = upgrade_data
+			console.log(upgrade_data)
+		},
+		onLoad() {
+			
+			
+		},
+		onPullDownRefresh() {
+			this.res();
+			this.getMineData();
 		},
 		methods: {
 			// 获取推荐商品数据
@@ -228,6 +287,15 @@
 				var data = {};
 				request.post('index/index', data).then(res => {
 					this.recommendList = res.data.data_list
+					uni.stopPullDownRefresh();
+				})
+			},
+			getMineData(){
+				var data = {};
+				request.post('user/center', data).then(res => {
+					this.mineData = res.data
+					console.log(res)
+					uni.stopPullDownRefresh();
 				})
 			},
 			//跳转设置列表
@@ -269,7 +337,7 @@
 		.title{
 			padding: 24rpx 32rpx 22rpx 50rpx;
 			background-color: #FFFFFF;
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 			.user_box{
 				display: flex;
 				align-items: center;
@@ -294,9 +362,9 @@
 			.collection_list{
 				display: flex;
 				margin:0 20rpx 22rpx 0;
-				border-bottom: 1rpx #E7E7E7 solid;
+				border-bottom: 0.3px #E7E7E7 solid;
 				.collection{
-					height: 180rpx;
+					height: 150rpx;
 					flex: 1;
 					display: flex;
 					flex-direction: column;
@@ -304,9 +372,10 @@
 					align-items: center;
 					.collection_number{
 						font-family: Akrobat-Regular;
-						font-size: 32rpx;
+						font-size: 36rpx;
 						line-height: 38rpx;
 						color: #333333;
+						margin-bottom: 4rpx;
 					}
 					.collection_name{
 						font-size: 22rpx;
@@ -324,8 +393,9 @@
 					margin-right: 12rpx;
 				}
 				text{
+					letter-spacing: 2rpx;
 					font-size: 22rpx;
-					line-height: 32rpx;
+					line-height: 22rpx;
 					color: #FF9377;
 				}
 			}
@@ -335,26 +405,33 @@
 			display: flex;
 			padding: 0rpx 52rpx 0rpx 50rpx;
 			background-color: #FFFFFF;
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 			text-align: center;
 			.balance{
 				height: 180rpx;
 				flex: 1;
 				display: flex;
-				flex-direction: column;
+				 align-items: center;
 				justify-content: center;
-				align-items: center;
+				flex-direction: column;
 				.balance_number{
+					display: flex;
+					align-items: flex-end;
+					text-align: center;
 					font-family: Akrobat-Regular;
 					font-size: 50rpx;
-					line-height: 60rpx;
+					line-height: 50rpx;
 					color: #FE7956;
+					padding-right: 12rpx;
+					margin-bottom: 10rpx;
 					.symbol{
 						font-size: 36rpx;
-						line-height: 44rpx;
+						line-height: 36rpx;
+						text-align: center;
 					}
 				}
 				.balance_name{
+					text-align: center;
 					font-size: 28rpx;
 					line-height: 40rpx;
 					color: #555555;
@@ -369,12 +446,13 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 			color: #FE7956;
 			.text{
 				view{
 					font-size: 50rpx;
 					line-height: 60rpx;
+					margin-bottom: 6rpx;
 				}
 				text{
 					font-size: 24rpx;
@@ -383,9 +461,9 @@
 			}
 			.btn{
 				width:190rpx;
-				height:66rpx;
+				height:62rpx;
 				border-radius:12rpx;
-				border:1rpx solid rgba(254,121,86,1);
+				border:0.3px solid rgba(254,121,86,1);
 				font-size: 28rpx;
 				line-height: 66rpx;
 				text-align: center;
@@ -393,7 +471,7 @@
 		}
 		// 订单中心公共
 		.order_center{
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 			.order_title{
 				display: flex;
 				justify-content: space-between;
@@ -440,7 +518,7 @@
 			width: 50%;
 		}
 		.seniorPartner{
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 		}
 		.seniorPartner_list{
 			display: flex;
@@ -474,11 +552,11 @@
 					position: relative;
 					&::after{
 						position: absolute;
-						top: -9rpx;
+						top: -4rpx;
 						left: 50%;
-						margin-left: -46rpx;
+						margin-left: -42rpx;
 						content: "";
-						width: 92rpx;
+						width: 84rpx;
 						height: 1rpx;
 						background-color: #555555;
 					}
@@ -491,7 +569,7 @@
 			align-items: center;
 			padding: 18rpx 28rpx 18rpx 52rpx;
 			background-color: #FFFFFF;
-			margin-bottom: 24rpx;
+			margin-bottom: 16rpx;
 			.name{
 				font-size: 28rpx;
 				line-height: 40rpx;
@@ -504,28 +582,32 @@
 		}
 		// 热卖推荐
 		.recommend_box{
-			.recommend{
+			.recommend {
 				height: 248rpx;
 				background-color: #FFFFFF;
 				margin-bottom: 12rpx;
-				padding: 15rpx 53rpx 15rpx 50rpx;
+				padding: 15rpx 40rpx 15rpx 40rpx;
 				display: flex;
-				.recommend_img{
+			
+				.recommend_img {
 					width: 248rpx;
 					height: 248rpx;
-					margin-right: 33rpx;
+					margin-right: 18rpx;
 				}
-				.recommend_txt{
+			
+				.recommend_txt {
 					padding: 15rpx 0;
 					flex: 1;
 					display: flex;
 					flex-direction: column;
 					justify-content: space-between;
 					position: relative;
-					.title{
-						font-size:28rpx;
-						color:rgba(0,0,0,1);
-						line-height:40rpx;
+			
+					.title {
+						text-indent: -14rpx;
+						font-size: 28rpx;
+						color: rgba(0, 0, 0, 1);
+						line-height: 40rpx;
 						text-overflow: -o-ellipsis-lastline;
 						overflow: hidden;
 						text-overflow: ellipsis;
@@ -533,21 +615,33 @@
 						-webkit-line-clamp: 2;
 						-webkit-box-orient: vertical;
 					}
+			
 					.price {
 						font-family: Akrobat-Regular;
 						font-size: 40rpx;
 						line-height: 48rpx;
 						color: rgba(0, 0, 0, 1);
+			
 						.symbol {
 							font-size: 24rpx;
 							line-height: 34rpx;
 						}
+			
 						.earn {
 							font-family: SourceHanSansCN-Regular;
 							font-size: 24rpx;
 							color: rgba(255, 129, 96, 1);
 							line-height: 36rpx;
 							margin-left: 6rpx;
+			
+							.earn_icon {
+								font-family: Akrobat-Regular;
+								font-size: 24rpx;
+								line-height: 36rpx;
+								margin-right: 4rpx;
+			
+							}
+			
 							text {
 								margin-left: 4rpx;
 								font-family: Akrobat-Regular;
@@ -556,11 +650,12 @@
 							}
 						}
 					}
-					image{
+			
+					image {
 						width: 48rpx;
 						height: 48rpx;
 						position: absolute;
-						bottom: 10rpx;
+						bottom: 20rpx;
 						right: 0;
 					}
 				}

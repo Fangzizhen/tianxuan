@@ -1,36 +1,27 @@
 <template>
 	<view class="page">
-		<view class="order">
+		<view class="order" v-for="(order,index) in orderData" :key="index" @click="toDetail(order.express_id,order.express_number)">
 			<view class="title">
-				<text class="pinlei">{{ordrt.pinlei}}</text>
-				<text class="zhuangtai">{{ordrt.zhuangtai}}</text>
+				<text class="pinlei">包裹{{index += 1}}</text>
 			</view>
+			<view v-for="(item,indexd) in order.order_detail" :key="indexd">
 			<view class="content">
-				<image class="img" :src="ordrt.img"></image>
+				<image class="img" :src="item.images"></image>
 				<view class="category">
-					<view class="name">{{ordrt.name}}</view>
-					<text class="guige">{{ordrt.guige}}</text>
-				</view>
-				<view class="number">
-					<view class="danjia"><text class="symbol">￥</text>{{ordrt.danjia}}</view>
-					<view class="shuliang">x{{ordrt.shuliang}}</view>
+					<view class="name">{{item.title}}</view>
+					<!-- <text class="guige">快递已送达</text> -->
 				</view>
 			</view>
-			<view class="statistics">总价<text class="symbol">￥</text><text class="nur">{{ordrt.zongjia}}</text>，优惠<text class="symbol">￥</text><text
-				 class="nur">{{ordrt.youhui}}</text>，实付款<text class="symbol">￥</text><text class="nur">{{ordrt.shiji}}</text></view>
+			</view>
 			<view class="logisticsList">
 				<view class="logistics">
-					<text class="name">订单编号</text>
-					<text class="logistics_content num">{{ordrt.orderNum}}</text>
-					<text class="btn" @click="copy(ordrt.orderNum)">复制单号</text>
+					<text class="name">订单快递单号</text>
+					<text class="logistics_content num">{{order.express_number}}</text>
+					<text class="btn" @click="copy(order.express_number)">复制单号</text>
 				</view>
 				<view class="logistics">
-					<text class="name">国内承运人</text>
-					<text class="logistics_content" style="font-size: 24rpx;">{{ordrt.carrierName}}</text>
-				</view>
-				<view class="logistics">
-					<text class="name">国内承运人电话</text>
-					<text class="logistics_content num txtcolor">{{ordrt.carrierPhone}}</text>
+					<text class="name">国内承运单位</text>
+					<text class="logistics_content" style="font-size: 24rpx;">{{order.express_name}}</text>
 				</view>
 			</view>
 		</view>
@@ -38,34 +29,40 @@
 </template>
 
 <script>
+	import request from '../../common/request.js';
 	// h5复制插件
 	import h5Copy from '@/js_sdk/junyi-h5-copy/junyi-h5-copy/junyi-h5-copy.js'
 	export default {
 		data() {
 			return {
-				ordrt: {
-					goods_id: 1,
-					pinlei: "时令鲜果",
-					zhuangtai: "卖家已发货",
-					name: "四川眉山9号橙一个长长的名字的展示形式",
-					danjia: "45",
-					shuliang: "2",
-					guige: "#5g 1支装",
-					zongjia: 90,
-					youhui: "0",
-					shiji: 90,
-					img: "../../static/images/touxiang.jpg",
-					orderNum: '110000000000',
-					carrierName: "圆通快递",
-					carrierPhone: "95166666666"
-				}
+				id : '',
+				orderData:{}
 			}
 		},
 		onLoad: function(option) { //option 为上一页面跳转携带的参数
-			console.log(option)
-
+			this.id = option.id;
+			this.int()
+		},
+		onPullDownRefresh() {
+			this.int();
 		},
 		methods: {
+			
+			
+			// 足迹
+			int(){
+				var data = {
+					order_id:this.id
+				}
+				console.log(data)
+				request.post('package/index', data).then(res => {
+					console.log(res)
+					this.orderData = res.data
+					console.log(this.orderData)
+					// console.log(this.orderData)
+				
+				})
+			},
 			// 触发方法
 			copy(orderNum) {
 				let content = orderNum // 复制内容，必须字符串，数字需要转换为字符串
@@ -81,6 +78,13 @@
 					})
 				}
 
+			},
+			// 进入详情
+			toDetail(id,code){
+				uni.navigateTo({
+					// url: 'afterSalseDetail?info='+encodeURIComponent(JSON.stringify(parameter))
+					url:"logisticsDetail?id="+id+"&code="+encodeURIComponent(JSON.stringify(code))
+				})
 			}
 		}
 	}
@@ -93,7 +97,7 @@
 		.order {
 			background-color: #fff;
 			padding: 38rpx 24rpx 6rpx 32rpx;
-
+			margin-bottom: 20rpx;
 			.title {
 				display: flex;
 				justify-content: space-between;
@@ -114,31 +118,39 @@
 
 			.content {
 				display: flex;
-				justify-content: space-between;
-
 				.img {
 					width: 180rpx;
 					height: 180rpx;
 				}
 
 				.category {
-					width: 410rpx;
-
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					flex: 1;
+					margin-left: 20rpx;
 					.name {
 						font-size: 28rpx;
 						line-height: 40rpx;
 						min-height: 80rpx;
+						text-overflow: -o-ellipsis-lastline;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
 					}
 
 					.guige {
-						height: 33rpx;
-						padding: 4rpx 8rpx;
-						border-radius: 6rpx;
-						background-color: #D8D8D8;
-						font-size: 20rpx;
-						line-height: 33rpx;
-						text-align: center;
+						font-size: 25rpx;
+						line-height: 40rpx;
 						color: #999999;
+						text-overflow: -o-ellipsis-lastline;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
 					}
 				}
 

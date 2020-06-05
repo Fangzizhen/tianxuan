@@ -1,4 +1,5 @@
 <template>
+	<!-- 个人信息 -->
 	<view class="page">
 		<view class="uni-form-item uni-column">
 			<view class="title">昵称</view>
